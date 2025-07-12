@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API调用测试 - 美团外卖数据分析</title>
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <!-- 导航栏 -->
+    <div class="navbar bg-base-100 shadow-lg">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl">🧪 API调用测试</a>
+        </div>
+        <div class="flex-none">
+            <a href="index.html" class="btn btn-outline btn-sm mr-2">返回主页</a>
+            <a href="funnel-test.html" class="btn btn-primary btn-sm">转化漏斗测试</a>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        
+        <!-- API配置显示 -->
+        <div class="card bg-base-100 shadow-xl mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4">🔧 当前API配置</h2>
+                <div class="bg-base-200 p-4 rounded-lg">
+                    <pre id="apiConfig" class="text-sm"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试按钮 -->
+        <div class="card bg-base-100 shadow-xl mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-xl mb-4">🚀 API测试</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="btn btn-primary" onclick="testBasicConnection()">
+                        测试基础连接
+                    </button>
+                    <button class="btn btn-secondary" onclick="testTextAnalysis()">
+                        测试文本分析
+                    </button>
+                    <button class="btn btn-accent" onclick="testImageAnalysis()">
+                        测试图片分析
+                    </button>
+                    <button class="btn btn-info" onclick="testFunnelPrompt()">
+                        测试转化漏斗提示词
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试结果 -->
+        <div class="card bg-base-100 shadow-xl" id="testResults" style="display: none;">
+            <div class="card-body">
+                <h2 class="card-title text-xl mb-4">📋 测试结果</h2>
+                <div id="testResultsContent">
+                    <!-- 测试结果将在这里显示 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载状态 -->
+        <div class="card bg-base-100 shadow-xl" id="loadingSection" style="display: none;">
+            <div class="card-body text-center">
+                <div class="loading loading-spinner loading-lg mb-4"></div>
+                <p class="text-lg" id="loadingText">正在测试API连接...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    
+    <script>
+        // 页面加载时显示API配置
+        document.addEventListener('DOMContentLoaded', function() {
+            displayAPIConfig();
+        });
+
+        function displayAPIConfig() {
+            const configElement = document.getElementById('apiConfig');
+            if (typeof API_CONFIG !== 'undefined') {
+                const displayConfig = {
+                    baseUrl: API_CONFIG.baseUrl,
+                    model: API_CONFIG.model,
+                    temperature: API_CONFIG.temperature,
+                    max_tokens: API_CONFIG.max_tokens,
+                    timeout: API_CONFIG.timeout,
+                    apiKey: API_CONFIG.apiKey ? `${API_CONFIG.apiKey.substring(0, 15)}...` : '未配置'
+                };
+                configElement.textContent = JSON.stringify(displayConfig, null, 2);
+            } else {
+                configElement.textContent = 'API配置未加载';
+            }
+        }
+
+        function showLoading(text = '正在测试...') {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingSection').style.display = 'block';
+            document.getElementById('testResults').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingSection').style.display = 'none';
+        }
+
+        function showResults(title, result, isSuccess = true) {
+            hideLoading();
+            
+            const resultsDiv = document.getElementById('testResults');
+            const contentDiv = document.getElementById('testResultsContent');
+
+            let html = `<div class="space-y-4">`;
+            
+            // 标题和状态
+            html += `<div class="alert ${isSuccess ? 'alert-success' : 'alert-error'}">`;
+            html += `<span>${isSuccess ? '✅' : '❌'} ${title}</span>`;
+            html += '</div>';
+
+            // 结果内容
+            if (typeof result === 'object') {
+                html += `<div class="bg-base-200 p-4 rounded-lg">`;
+                html += `<h4 class="font-semibold mb-2">详细结果：</h4>`;
+                html += `<pre class="text-xs overflow-auto max-h-96">${JSON.stringify(result, null, 2)}</pre>`;
+                html += '</div>';
+            } else {
+                html += `<div class="bg-base-200 p-4 rounded-lg">`;
+                html += `<p class="text-sm">${result}</p>`;
+                html += '</div>';
+            }
+
+            html += '</div>';
+            contentDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+
+        async function testBasicConnection() {
+            showLoading('测试基础API连接...');
+            
+            try {
+                const api = new GeminiAPI();
+                const result = await api.testConnection();
+                
+                if (result.success) {
+                    showResults('基础连接测试成功', result, true);
+                } else {
+                    showResults('基础连接测试失败', result, false);
+                }
+            } catch (error) {
+                console.error('基础连接测试出错:', error);
+                showResults('基础连接测试出错', { error: error.message }, false);
+            }
+        }
+
+        async function testTextAnalysis() {
+            showLoading('测试文本分析功能...');
+            
+            try {
+                const api = new GeminiAPI();
+                
+                // 构建简单的文本分析请求
+                const requestBody = {
+                    model: api.model,
+                    messages: [
+                        {
+                            role: "user",
+                            content: "请简单分析一下：某餐厅昨日订单100单，今日订单120单。"
+                        }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 500
+                };
+
+                const response = await fetch(api.baseUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${api.apiKey}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const result = await response.json();
+                showResults('文本分析测试成功', result, true);
+
+            } catch (error) {
+                console.error('文本分析测试出错:', error);
+                showResults('文本分析测试失败', { error: error.message }, false);
+            }
+        }
+
+        async function testImageAnalysis() {
+            showLoading('测试图片分析功能...');
+            
+            try {
+                // 创建一个简单的测试图片（1x1像素的PNG）
+                const canvas = document.createElement('canvas');
+                canvas.width = 1;
+                canvas.height = 1;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#FF0000';
+                ctx.fillRect(0, 0, 1, 1);
+                const testImageBase64 = canvas.toDataURL('image/png');
+
+                const api = new GeminiAPI();
+                const storeInfo = {
+                    name: '测试店铺',
+                    category: '中式快餐',
+                    address: '测试地址'
+                };
+
+                const result = await api.analyzeImage(testImageBase64, storeInfo);
+                showResults('图片分析测试完成', result, !result.error);
+
+            } catch (error) {
+                console.error('图片分析测试出错:', error);
+                showResults('图片分析测试失败', { error: error.message }, false);
+            }
+        }
+
+        async function testFunnelPrompt() {
+            showLoading('测试转化漏斗提示词...');
+            
+            try {
+                const api = new GeminiAPI();
+                const storeInfo = {
+                    name: '测试店铺',
+                    category: '中式快餐',
+                    address: '北京市朝阳区'
+                };
+
+                const prompt = api.buildAnalysisPrompt(storeInfo);
+                
+                showResults('转化漏斗提示词生成成功', {
+                    promptLength: prompt.length,
+                    storeInfo: storeInfo,
+                    promptPreview: prompt.substring(0, 500) + '...'
+                }, true);
+
+            } catch (error) {
+                console.error('提示词测试出错:', error);
+                showResults('提示词测试失败', { error: error.message }, false);
+            }
+        }
+    </script>
+</body>
+</html>

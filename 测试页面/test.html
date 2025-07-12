@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>功能测试页面</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h1 class="card-title text-2xl mb-6">🧪 功能测试页面</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 工具函数测试 -->
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title">工具函数测试</h2>
+                            <div class="space-y-2">
+                                <button class="btn btn-sm btn-primary" onclick="testToast()">测试提示消息</button>
+                                <button class="btn btn-sm btn-secondary" onclick="testValidation()">测试数据验证</button>
+                                <button class="btn btn-sm btn-accent" onclick="testStorage()">测试本地存储</button>
+                                <button class="btn btn-sm btn-outline" onclick="toggleTestTheme()">切换主题</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 图表测试 -->
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title">图表功能测试</h2>
+                            <div class="space-y-2">
+                                <button class="btn btn-sm btn-primary" onclick="testBarChart()">柱状图</button>
+                                <button class="btn btn-sm btn-secondary" onclick="testLineChart()">折线图</button>
+                                <button class="btn btn-sm btn-accent" onclick="testPieChart()">饼图</button>
+                                <button class="btn btn-sm btn-info" onclick="testRadarChart()">雷达图</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- API测试 -->
+                    <div class="card bg-base-200">
+                        <div class="card-body">
+                            <h2 class="card-title">API功能测试</h2>
+                            <div class="space-y-2">
+                                <button class="btn btn-sm btn-primary" onclick="testAPIConnection()">测试连接</button>
+                                <button class="btn btn-sm btn-secondary" onclick="testDemoData()">演示数据</button>
+                                <button class="btn btn-sm btn-accent" onclick="testReportGeneration()">生成报告</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 测试结果显示区域 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold mb-4">测试结果</h2>
+                    <div id="testResults" class="bg-base-300 rounded-lg p-4 min-h-32">
+                        <p class="text-gray-500">点击上方按钮开始测试...</p>
+                    </div>
+                </div>
+                
+                <!-- 图表显示区域 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold mb-4">图表测试区域</h2>
+                    <div id="testChart" style="width: 100%; height: 400px; background: #f5f5f5; border-radius: 8px;"></div>
+                </div>
+                
+                <!-- 报告测试区域 -->
+                <div class="mt-8">
+                    <h2 class="text-xl font-bold mb-4">报告测试区域</h2>
+                    <div id="testReport" class="bg-white rounded-lg p-4 min-h-32 border">
+                        <p class="text-gray-500">报告内容将在这里显示...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入所有JavaScript文件 -->
+    <script src="js/utils.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/report.js"></script>
+    <script src="js/demo-data.js"></script>
+
+    <script>
+        // 测试函数
+        function logResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            const colorClass = {
+                'success': 'text-green-600',
+                'error': 'text-red-600',
+                'warning': 'text-yellow-600',
+                'info': 'text-blue-600'
+            }[type] || 'text-gray-600';
+            
+            resultsDiv.innerHTML += `<div class="${colorClass}">[${timestamp}] ${message}</div>`;
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+
+        // 工具函数测试
+        function testToast() {
+            showToast('这是一个测试消息', 'success');
+            logResult('✅ Toast消息测试完成', 'success');
+        }
+
+        function testValidation() {
+            const testEmail = 'test@example.com';
+            const testPhone = '13800138000';
+            const isEmailValid = Validator.isEmail(testEmail);
+            const isPhoneValid = Validator.isPhone(testPhone);
+            
+            logResult(`📧 邮箱验证 (${testEmail}): ${isEmailValid ? '✅ 有效' : '❌ 无效'}`, isEmailValid ? 'success' : 'error');
+            logResult(`📱 手机验证 (${testPhone}): ${isPhoneValid ? '✅ 有效' : '❌ 无效'}`, isPhoneValid ? 'success' : 'error');
+        }
+
+        function testStorage() {
+            const testData = { name: '测试数据', timestamp: new Date().toISOString() };
+            Storage.set('testKey', testData);
+            const retrieved = Storage.get('testKey');
+            
+            const success = JSON.stringify(testData) === JSON.stringify(retrieved);
+            logResult(`💾 本地存储测试: ${success ? '✅ 成功' : '❌ 失败'}`, success ? 'success' : 'error');
+        }
+
+        // 图表测试
+        function testBarChart() {
+            const chartData = {
+                type: 'bar',
+                title: '测试柱状图',
+                data: {
+                    categories: ['产品A', '产品B', '产品C', '产品D'],
+                    values: [120, 200, 150, 80],
+                    unit: '件'
+                }
+            };
+            
+            chartGenerator.generateChart('testChart', chartData);
+            logResult('📊 柱状图生成完成', 'success');
+        }
+
+        function testLineChart() {
+            const chartData = {
+                type: 'line',
+                title: '测试折线图',
+                data: {
+                    dates: ['1月', '2月', '3月', '4月', '5月'],
+                    values: [100, 120, 140, 110, 160],
+                    unit: '单'
+                }
+            };
+            
+            chartGenerator.generateChart('testChart', chartData);
+            logResult('📈 折线图生成完成', 'success');
+        }
+
+        function testPieChart() {
+            const chartData = {
+                type: 'pie',
+                title: '测试饼图',
+                data: {
+                    items: [
+                        { name: '类别A', value: 35 },
+                        { name: '类别B', value: 25 },
+                        { name: '类别C', value: 20 },
+                        { name: '类别D', value: 20 }
+                    ]
+                }
+            };
+            
+            chartGenerator.generateChart('testChart', chartData);
+            logResult('🥧 饼图生成完成', 'success');
+        }
+
+        function testRadarChart() {
+            const chartData = {
+                type: 'radar',
+                title: '测试雷达图',
+                data: {
+                    indicators: [
+                        { name: '指标1', max: 100 },
+                        { name: '指标2', max: 100 },
+                        { name: '指标3', max: 100 },
+                        { name: '指标4', max: 100 },
+                        { name: '指标5', max: 100 }
+                    ],
+                    values: [80, 90, 70, 85, 75]
+                }
+            };
+            
+            chartGenerator.generateChart('testChart', chartData);
+            logResult('🎯 雷达图生成完成', 'success');
+        }
+
+        // API测试
+        async function testAPIConnection() {
+            try {
+                logResult('🔄 正在测试API连接...', 'info');
+                const isConnected = await geminiAPI.testConnection();
+                logResult(`🌐 API连接测试: ${isConnected ? '✅ 成功' : '❌ 失败'}`, isConnected ? 'success' : 'error');
+            } catch (error) {
+                logResult(`❌ API连接测试失败: ${error.message}`, 'error');
+            }
+        }
+
+        function testDemoData() {
+            enableDemoMode();
+            logResult('🎭 演示模式已启用', 'success');
+            logResult('📊 演示数据已加载', 'info');
+        }
+
+        function testReportGeneration() {
+            const reportContainer = document.getElementById('testReport');
+            
+            // 创建一个简化的报告生成器实例
+            const testReportGenerator = new ReportGenerator();
+            
+            // 生成报告HTML
+            const reportHTML = `
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg p-4 mb-4">
+                    <h3 class="text-lg font-bold">测试报告</h3>
+                    <p class="text-sm opacity-90">这是一个测试生成的报告</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-green-50 p-3 rounded border-l-4 border-green-500">
+                        <h4 class="font-semibold text-green-800">优势</h4>
+                        <p class="text-sm text-green-700">测试优势项目</p>
+                    </div>
+                    <div class="bg-red-50 p-3 rounded border-l-4 border-red-500">
+                        <h4 class="font-semibold text-red-800">劣势</h4>
+                        <p class="text-sm text-red-700">测试劣势项目</p>
+                    </div>
+                </div>
+            `;
+            
+            reportContainer.innerHTML = reportHTML;
+            logResult('📋 测试报告生成完成', 'success');
+        }
+
+        // 主题切换功能
+        function toggleTestTheme() {
+            if (typeof themeManager !== 'undefined') {
+                themeManager.toggleTheme();
+                logResult('🎨 主题已切换', 'info');
+            } else {
+                // 简单的主题切换
+                const htmlRoot = document.getElementById('htmlRoot');
+                const currentTheme = htmlRoot.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                htmlRoot.setAttribute('data-theme', newTheme);
+                logResult(`🎨 主题已切换至: ${newTheme}`, 'info');
+            }
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            logResult('🚀 测试页面已加载完成', 'success');
+            logResult('💡 点击上方按钮开始测试各项功能', 'info');
+            updateChartCount(0);
+        });
+    </script>
+</body>
+</html>

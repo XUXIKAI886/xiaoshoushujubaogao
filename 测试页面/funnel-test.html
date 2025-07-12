@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>转化漏斗数据测试 - 美团外卖数据分析</title>
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        .upload-area {
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #3B82F6;
+            background-color: #EFF6FF;
+        }
+        .upload-area.dragover {
+            border-color: #1D4ED8;
+            background-color: #DBEAFE;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <!-- 导航栏 -->
+    <div class="navbar bg-base-100 shadow-lg">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl">📊 转化漏斗数据测试</a>
+        </div>
+        <div class="flex-none">
+            <div class="flex items-center space-x-2">
+                <!-- 模式切换 -->
+                <div class="form-control">
+                    <label class="label cursor-pointer">
+                        <span class="label-text mr-2">真实AI分析</span>
+                        <input type="checkbox" id="realAnalysisMode" class="toggle toggle-primary" checked />
+                    </label>
+                </div>
+                <a href="index.html" class="btn btn-outline btn-sm">返回主页</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        
+        <!-- 说明卡片 -->
+        <div class="card bg-base-100 shadow-xl mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4">🎯 转化漏斗数据测试说明</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2">📋 支持的数据格式</h3>
+                        <ul class="list-disc list-inside space-y-1 text-sm">
+                            <li><strong>左侧黄色区域</strong>：本店铺数据</li>
+                            <li>第一列：入店转化率、下单转化率</li>
+                            <li>第二列：曝光人数、入店人数、下单人数</li>
+                            <li><strong>右侧蓝色区域</strong>：同行均值数据</li>
+                            <li>第一列：曝光人数、入店人数、下单人数</li>
+                            <li>第二列：入店转化率、下单转化率</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2">🔍 AI将提取的数据</h3>
+                        <ul class="list-disc list-inside space-y-1 text-sm">
+                            <li>本店与同行的转化率对比</li>
+                            <li>流量数据（曝光、入店、下单）</li>
+                            <li>转化漏斗分析</li>
+                            <li>竞争地位评估</li>
+                            <li>优化建议和行动计划</li>
+                        </ul>
+
+                        <div class="mt-4 p-3 bg-info/10 rounded-lg">
+                            <h4 class="font-semibold text-sm mb-1">💡 分析模式说明</h4>
+                            <p class="text-xs text-gray-600">
+                                • <strong>真实AI分析</strong>：调用Gemini API进行实际分析<br>
+                                • <strong>演示模式</strong>：使用预设数据快速体验功能<br>
+                                • 可在右上角切换分析模式
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 店铺信息输入 -->
+        <div class="card bg-base-100 shadow-xl mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-xl mb-4">🏪 店铺基本信息</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">店铺名称</span>
+                        </label>
+                        <input type="text" id="storeName" placeholder="请输入店铺名称"
+                               class="input input-bordered" value="测试店铺">
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">经营品类</span>
+                        </label>
+                        <input type="text" id="storeCategory" placeholder="请输入经营品类"
+                               class="input input-bordered" value="中式快餐">
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">店铺地址</span>
+                        </label>
+                        <input type="text" id="storeAddress" placeholder="请输入店铺地址"
+                               class="input input-bordered" value="北京市朝阳区">
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">数据时间范围</span>
+                        </label>
+                        <input type="text" id="dataDateRange" placeholder="2025-06-12 至 2025-07-11"
+                               class="input input-bordered" value="2025-06-12 至 2025-07-11">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片上传区域 -->
+        <div class="card bg-base-100 shadow-xl mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-xl mb-4">📸 上传转化漏斗截图</h2>
+                
+                <div class="upload-area border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer" 
+                     id="uploadArea" onclick="document.getElementById('imageUpload').click()">
+                    <input type="file" id="imageUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
+                    <div class="upload-content" id="uploadContent">
+                        <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p class="text-lg font-semibold text-gray-700 mb-2">上传转化漏斗截图</p>
+                        <p class="text-sm text-gray-500">支持 JPG, PNG, WEBP 格式，最大 10MB</p>
+                    </div>
+                </div>
+                
+                <div class="preview-area hidden mt-6" id="previewArea">
+                    <h3 class="text-lg font-semibold mb-4">图片预览</h3>
+                    <div class="flex justify-center">
+                        <img id="imagePreview" class="max-w-full max-h-96 rounded-lg shadow-lg">
+                    </div>
+                    <div class="text-center mt-4 space-x-2">
+                        <button class="btn btn-outline btn-sm" onclick="removeImage()">重新选择</button>
+                        <button class="btn btn-primary btn-sm" id="analyzeBtn" onclick="startFunnelAnalysis()" disabled>
+                            开始分析转化漏斗
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="showDemoResult()">
+                            查看演示结果
+                        </button>
+                        <button class="btn btn-info btn-sm" onclick="testAPIConnection()">
+                            测试API连接
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分析结果展示区域 -->
+        <div class="hidden" id="resultSection">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <h2 class="card-title text-xl mb-4">📊 转化漏斗分析结果</h2>
+                    <div id="resultContent">
+                        <!-- 分析结果将在这里显示 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载状态 -->
+        <div class="hidden" id="loadingSection">
+            <div class="card bg-base-100 shadow-xl">
+                <div class="card-body text-center">
+                    <div class="loading loading-spinner loading-lg mb-4"></div>
+                    <p class="text-lg">AI正在分析转化漏斗数据...</p>
+                    <p class="text-sm text-gray-500 mt-2">这可能需要20-40秒时间</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/demo-data.js"></script>
+    
+    <script>
+        let uploadedImage = null;
+        
+        // 图片上传处理
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleImageUpload(file);
+            }
+        });
+        
+        // 拖拽上传
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImageUpload(files[0]);
+            }
+        });
+        
+        async function handleImageUpload(file) {
+            try {
+                const validation = validateFile(file);
+                if (!validation.valid) {
+                    alert(validation.errors.join('\n'));
+                    return;
+                }
+                
+                const base64 = await fileToBase64(file);
+                uploadedImage = { file, base64, name: file.name, size: file.size };
+                
+                // 显示预览
+                const previewArea = document.getElementById('previewArea');
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = base64;
+                previewArea.classList.remove('hidden');
+                
+                // 启用分析按钮
+                document.getElementById('analyzeBtn').disabled = false;
+                
+                // 更新上传区域显示
+                document.getElementById('uploadContent').innerHTML = `
+                    <svg class="mx-auto h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <p class="text-lg font-semibold text-green-700 mb-2">图片上传成功</p>
+                    <p class="text-sm text-gray-500">文件大小: ${formatFileSize(file.size)}</p>
+                `;
+                
+            } catch (error) {
+                console.error('图片上传失败:', error);
+                alert('图片上传失败，请重试');
+            }
+        }
+        
+        function removeImage() {
+            uploadedImage = null;
+            document.getElementById('previewArea').classList.add('hidden');
+            document.getElementById('analyzeBtn').disabled = true;
+            document.getElementById('imageUpload').value = '';
+            
+            document.getElementById('uploadContent').innerHTML = `
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p class="text-lg font-semibold text-gray-700 mb-2">上传转化漏斗截图</p>
+                <p class="text-sm text-gray-500">支持 JPG, PNG, WEBP 格式，最大 10MB</p>
+            `;
+        }
+        
+        async function startFunnelAnalysis() {
+            if (!uploadedImage) {
+                alert('请先上传图片');
+                return;
+            }
+
+            // 检查是否使用真实AI分析
+            const useRealAnalysis = document.getElementById('realAnalysisMode').checked;
+
+            if (!useRealAnalysis) {
+                // 使用演示数据
+                console.log('使用演示模式分析...');
+                displayFunnelResult(CONVERSION_FUNNEL_DEMO);
+                return;
+            }
+
+            // 显示加载状态
+            document.getElementById('loadingSection').classList.remove('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+
+            try {
+                const storeInfo = {
+                    name: document.getElementById('storeName').value,
+                    category: document.getElementById('storeCategory').value,
+                    address: document.getElementById('storeAddress').value,
+                    dateRange: document.getElementById('dataDateRange').value || '30天数据'
+                };
+
+                // 创建一个新的API实例，确保不被演示模式影响
+                const realAPI = new GeminiAPI();
+
+                // 调用真实的AI分析
+                console.log('开始真实AI分析...');
+                const result = await realAPI.analyzeImage(uploadedImage.base64, storeInfo);
+
+                // 隐藏加载状态
+                document.getElementById('loadingSection').classList.add('hidden');
+
+                if (result.error) {
+                    throw new Error(result.error + (result.rawText ? '\n原始响应: ' + result.rawText : ''));
+                }
+
+                console.log('AI分析结果:', result);
+
+                // 显示结果
+                displayFunnelResult(result);
+
+            } catch (error) {
+                console.error('分析失败:', error);
+                document.getElementById('loadingSection').classList.add('hidden');
+
+                // 显示详细错误信息
+                const errorMsg = `分析失败: ${error.message}\n\n可能的原因：\n1. 网络连接问题\n2. API配置错误\n3. 图片格式不支持\n4. AI服务暂时不可用\n\n建议：可以关闭"真实AI分析"开关使用演示模式测试功能。`;
+                alert(errorMsg);
+            }
+        }
+        
+        function displayFunnelResult(result) {
+            const resultContent = document.getElementById('resultContent');
+            
+            // 检查是否有转化漏斗数据
+            if (result.extractedData && result.extractedData.conversionFunnel) {
+                const funnel = result.extractedData.conversionFunnel;
+                
+                resultContent.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="stats shadow w-full">
+                            <div class="stat">
+                                <div class="stat-title">数据周期</div>
+                                <div class="stat-value text-primary">${funnel.dataPeriod || '30天'}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-title">本店入店转化率</div>
+                                <div class="stat-value text-secondary">${funnel.storeData.visitRate || 'N/A'}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-title">本店下单转化率</div>
+                                <div class="stat-value text-accent">${funnel.storeData.orderRate || 'N/A'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="card bg-base-200">
+                                <div class="card-body">
+                                    <h3 class="card-title">本店数据</h3>
+                                    <div class="space-y-2">
+                                        <p><strong>曝光人数:</strong> ${funnel.storeData.exposure || 'N/A'}</p>
+                                        <p><strong>入店人数:</strong> ${funnel.storeData.visits || 'N/A'}</p>
+                                        <p><strong>下单人数:</strong> ${funnel.storeData.orders || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card bg-base-200">
+                                <div class="card-body">
+                                    <h3 class="card-title">同行均值</h3>
+                                    <div class="space-y-2">
+                                        <p><strong>曝光人数:</strong> ${funnel.industryAverage.exposure || 'N/A'}</p>
+                                        <p><strong>入店人数:</strong> ${funnel.industryAverage.visits || 'N/A'}</p>
+                                        <p><strong>下单人数:</strong> ${funnel.industryAverage.orders || 'N/A'}</p>
+                                        <p><strong>入店转化率:</strong> ${funnel.industryAverage.visitRate || 'N/A'}</p>
+                                        <p><strong>下单转化率:</strong> ${funnel.industryAverage.orderRate || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${funnel.comparison ? `
+                        <div class="card bg-base-200">
+                            <div class="card-body">
+                                <h3 class="card-title">对比分析</h3>
+                                <div class="space-y-2">
+                                    <p><strong>曝光差距:</strong> ${funnel.comparison.exposureGap || 'N/A'}</p>
+                                    <p><strong>转化率差距:</strong> ${funnel.comparison.conversionGap || 'N/A'}</p>
+                                    <p><strong>竞争地位:</strong> ${funnel.comparison.competitivePosition || 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div class="card bg-base-200">
+                            <div class="card-body">
+                                <h3 class="card-title">完整分析结果</h3>
+                                <pre class="text-xs overflow-auto bg-base-300 p-4 rounded">${JSON.stringify(result, null, 2)}</pre>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultContent.innerHTML = `
+                    <div class="alert alert-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                        <span>未检测到转化漏斗数据格式，显示原始分析结果</span>
+                    </div>
+                    <pre class="text-xs overflow-auto bg-base-300 p-4 rounded mt-4">${JSON.stringify(result, null, 2)}</pre>
+                `;
+            }
+            
+            document.getElementById('resultSection').classList.remove('hidden');
+        }
+
+        // 显示演示结果
+        function showDemoResult() {
+            if (typeof CONVERSION_FUNNEL_DEMO !== 'undefined') {
+                displayFunnelResult(CONVERSION_FUNNEL_DEMO);
+            } else {
+                alert('演示数据未加载');
+            }
+        }
+
+        // 测试API连接
+        async function testAPIConnection() {
+            try {
+                console.log('开始测试API连接...');
+                const testAPI = new GeminiAPI();
+
+                // 显示测试状态
+                const loadingSection = document.getElementById('loadingSection');
+                const loadingText = loadingSection.querySelector('p');
+                const originalText = loadingText.textContent;
+
+                loadingSection.classList.remove('hidden');
+                loadingText.textContent = '正在测试API连接...';
+
+                const result = await testAPI.testConnection();
+
+                loadingSection.classList.add('hidden');
+                loadingText.textContent = originalText;
+
+                if (result.success) {
+                    alert('✅ API连接成功！\n\n可以正常使用真实AI分析功能。');
+                    console.log('API连接测试成功:', result);
+                } else {
+                    let errorMsg = '❌ API连接失败！\n\n';
+                    errorMsg += `错误信息: ${result.error}\n\n`;
+
+                    if (result.details.status) {
+                        errorMsg += `HTTP状态: ${result.details.status} ${result.details.statusText}\n\n`;
+                    }
+
+                    if (result.suggestions.length > 0) {
+                        errorMsg += '建议解决方案:\n';
+                        result.suggestions.forEach((suggestion, index) => {
+                            errorMsg += `${index + 1}. ${suggestion}\n`;
+                        });
+                        errorMsg += '\n';
+                    }
+
+                    errorMsg += '临时解决方案:\n';
+                    errorMsg += '• 关闭"真实AI分析"开关使用演示模式\n';
+                    errorMsg += '• 检查网络连接和防火墙设置\n';
+                    errorMsg += '• 稍后重试或联系技术支持';
+
+                    alert(errorMsg);
+                    console.log('API连接测试失败:', result);
+                }
+
+            } catch (error) {
+                document.getElementById('loadingSection').classList.add('hidden');
+                console.error('API连接测试出错:', error);
+                alert('❌ API连接测试出错！\n\n错误信息: ' + error.message + '\n\n建议使用演示模式测试功能。');
+            }
+        }
+    </script>
+</body>
+</html>
