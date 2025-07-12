@@ -392,7 +392,7 @@ const DEMO_ANALYSIS_DATA = {
                 "expectedResults": "提升基础转化率2-5%"
             },
             {
-                "phase": "短期优化（1-2周）",
+                "phase": "短期优化（1-3周）",
                 "category": "运营提升",
                 "actions": [
                     "完善店铺视觉设计，统一品牌形象",

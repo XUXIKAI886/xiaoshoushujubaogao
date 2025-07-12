@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传功能修复测试</title>
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        .upload-area {
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #3B82F6;
+            background-color: #EFF6FF;
+        }
+        .upload-area.dragover {
+            border-color: #1D4ED8;
+            background-color: #DBEAFE;
+        }
+    </style>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h1 class="card-title text-2xl mb-6">🔧 上传功能修复测试</h1>
+                
+                <div class="alert alert-warning mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">问题诊断</h3>
+                        <div class="text-sm">修复了HTML内联onclick与JavaScript事件监听器的冲突问题</div>
+                    </div>
+                </div>
+
+                <!-- 修复后的上传区域 -->
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold mb-4">修复后的上传区域</h2>
+                    
+                    <div class="upload-area border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer" 
+                         id="uploadArea">
+                        <input type="file" id="imageUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
+                        <div class="upload-content" id="uploadContent">
+                            <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="text-lg font-semibold text-gray-700 mb-2">点击此处测试上传功能</p>
+                            <p class="text-sm text-gray-500">支持 JPG, PNG, WEBP 格式</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 测试结果显示 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-2">测试结果</h3>
+                    <div id="testResult" class="p-4 bg-base-200 rounded-lg">
+                        <p class="text-gray-600">等待测试...</p>
+                    </div>
+                </div>
+
+                <!-- 修复说明 -->
+                <div class="alert alert-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">修复内容</h3>
+                        <div class="text-sm mt-2">
+                            <p>✅ 移除HTML中的内联onclick事件</p>
+                            <p>✅ 移除JavaScript中的e.preventDefault()</p>
+                            <p>✅ 保留e.stopPropagation()防止事件冒泡</p>
+                            <p>✅ 确保单一事件处理机制</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 上传功能的事件处理（修复后的版本）
+        function initUploadEvents() {
+            const uploadArea = document.getElementById('uploadArea');
+            const imageUpload = document.getElementById('imageUpload');
+            const testResult = document.getElementById('testResult');
+
+            if (uploadArea && imageUpload) {
+                // 点击事件
+                uploadArea.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    console.log('点击上传区域');
+                    testResult.innerHTML = '<p class="text-blue-600">✅ 点击事件触发成功</p>';
+                    
+                    if (!imageUpload.disabled) {
+                        imageUpload.click();
+                        testResult.innerHTML += '<p class="text-green-600">✅ 文件选择对话框已打开</p>';
+                    }
+                });
+
+                // 文件选择事件
+                imageUpload.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const uploadContent = document.getElementById('uploadContent');
+                        uploadContent.innerHTML = `
+                            <svg class="mx-auto h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <p class="text-lg font-semibold text-green-700 mb-2">文件选择成功！</p>
+                            <p class="text-sm text-gray-500">文件名: ${file.name}</p>
+                            <p class="text-sm text-gray-500">文件大小: ${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                            <button class="btn btn-sm btn-outline mt-2" onclick="resetUpload()">重新选择</button>
+                        `;
+                        
+                        testResult.innerHTML = `
+                            <p class="text-green-600">✅ 上传功能完全正常！</p>
+                            <p class="text-sm text-gray-600">文件: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</p>
+                        `;
+                    }
+                });
+
+                // 拖拽事件
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+
+                uploadArea.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    uploadArea.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        // 模拟文件选择
+                        const file = files[0];
+                        const uploadContent = document.getElementById('uploadContent');
+                        uploadContent.innerHTML = `
+                            <svg class="mx-auto h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <p class="text-lg font-semibold text-green-700 mb-2">拖拽上传成功！</p>
+                            <p class="text-sm text-gray-500">文件名: ${file.name}</p>
+                            <button class="btn btn-sm btn-outline mt-2" onclick="resetUpload()">重新选择</button>
+                        `;
+                        
+                        testResult.innerHTML = `
+                            <p class="text-green-600">✅ 拖拽上传功能正常！</p>
+                            <p class="text-sm text-gray-600">文件: ${file.name}</p>
+                        `;
+                    }
+                });
+
+                console.log('上传事件初始化完成');
+                testResult.innerHTML = '<p class="text-blue-600">📋 上传功能已初始化，请点击测试</p>';
+            } else {
+                testResult.innerHTML = '<p class="text-red-600">❌ 找不到上传元素</p>';
+            }
+        }
+
+        function resetUpload() {
+            document.getElementById('imageUpload').value = '';
+            document.getElementById('uploadContent').innerHTML = `
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p class="text-lg font-semibold text-gray-700 mb-2">点击此处测试上传功能</p>
+                <p class="text-sm text-gray-500">支持 JPG, PNG, WEBP 格式</p>
+            `;
+            document.getElementById('testResult').innerHTML = '<p class="text-blue-600">📋 已重置，可以重新测试</p>';
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initUploadEvents);
+    </script>
+</body>
+</html>

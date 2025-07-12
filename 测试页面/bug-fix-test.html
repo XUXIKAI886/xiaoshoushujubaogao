@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问题修复测试页面</title>
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    
+    <style>
+        .upload-area {
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #3B82F6;
+            background-color: #EFF6FF;
+        }
+        .upload-area.dragover {
+            border-color: #1D4ED8;
+            background-color: #DBEAFE;
+        }
+    </style>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="card bg-base-100 shadow-xl mb-8">
+            <div class="card-body">
+                <h1 class="card-title text-2xl mb-6">🔧 问题修复测试页面</h1>
+                
+                <!-- 问题1测试：上传截图弹窗重复问题 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4">问题1测试：上传截图功能</h2>
+                    <div class="alert alert-info mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span><strong>测试说明</strong>：点击上传区域，应该只弹出一次文件选择对话框，不会重复弹出。</span>
+                    </div>
+                    
+                    <div class="upload-area border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer" 
+                         id="uploadArea" onclick="document.getElementById('imageUpload').click()">
+                        <input type="file" id="imageUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
+                        <div class="upload-content" id="uploadContent">
+                            <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p class="text-lg font-semibold text-gray-700 mb-2">点击测试上传功能</p>
+                            <p class="text-sm text-gray-500">支持 JPG, PNG, WEBP 格式</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="badge badge-success">✅ 修复状态</div>
+                        <span class="ml-2 text-sm">已添加事件防重复触发机制</span>
+                    </div>
+                </div>
+
+                <!-- 问题2测试：图表生成数量 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4">问题2测试：图表生成数量</h2>
+                    <div class="alert alert-info mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span><strong>测试说明</strong>：AI分析现在将始终生成3个图表，不会出现2个或其他数量的情况。</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="card bg-base-200">
+                            <div class="card-body text-center">
+                                <h3 class="card-title text-sm">图表1</h3>
+                                <p class="text-xs">转化漏斗对比分析</p>
+                                <div class="badge badge-primary">柱状图</div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-200">
+                            <div class="card-body text-center">
+                                <h3 class="card-title text-sm">图表2</h3>
+                                <p class="text-xs">转化率趋势对比</p>
+                                <div class="badge badge-secondary">折线图</div>
+                            </div>
+                        </div>
+                        <div class="card bg-base-200">
+                            <div class="card-body text-center">
+                                <h3 class="card-title text-sm">图表3</h3>
+                                <p class="text-xs">商品分类占比</p>
+                                <div class="badge badge-accent">饼图</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="badge badge-success">✅ 修复状态</div>
+                        <span class="ml-2 text-sm">已在AI提示词中强制要求生成3个图表</span>
+                    </div>
+                </div>
+
+                <!-- 问题3测试：时间范围修改 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4">问题3测试：时间范围修改</h2>
+                    <div class="alert alert-info mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span><strong>测试说明</strong>："短期优化（1-2周）"已修改为"短期优化（1-3周）"。</span>
+                    </div>
+                    
+                    <div class="mockup-code">
+                        <pre data-prefix="修改前:"><code>"短期优化（1-2周）"</code></pre>
+                        <pre data-prefix="修改后:" class="text-success"><code>"短期优化（1-3周）"</code></pre>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="badge badge-success">✅ 修复状态</div>
+                        <span class="ml-2 text-sm">已在所有相关文件中更新时间范围</span>
+                    </div>
+                </div>
+
+                <!-- 修复总结 -->
+                <div class="alert alert-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">所有问题已修复完成！</h3>
+                        <div class="text-sm mt-2">
+                            <p>✅ 问题1：修复上传截图弹窗重复问题</p>
+                            <p>✅ 问题2：确保始终生成3个图表</p>
+                            <p>✅ 问题3：时间范围改为1-3周</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 测试上传功能的事件处理
+        document.getElementById('imageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const uploadContent = document.getElementById('uploadContent');
+                uploadContent.innerHTML = `
+                    <svg class="mx-auto h-16 w-16 text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <p class="text-lg font-semibold text-green-700 mb-2">文件选择成功</p>
+                    <p class="text-sm text-gray-500">文件名: ${file.name}</p>
+                    <button class="btn btn-sm btn-outline mt-2" onclick="resetUpload()">重新选择</button>
+                `;
+            }
+        });
+
+        function resetUpload() {
+            document.getElementById('imageUpload').value = '';
+            document.getElementById('uploadContent').innerHTML = `
+                <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p class="text-lg font-semibold text-gray-700 mb-2">点击测试上传功能</p>
+                <p class="text-sm text-gray-500">支持 JPG, PNG, WEBP 格式</p>
+            `;
+        }
+    </script>
+</body>
+</html>

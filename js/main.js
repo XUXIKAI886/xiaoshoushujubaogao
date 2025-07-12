@@ -53,8 +53,12 @@ class MeituanAnalyzer {
         }
 
         if (uploadArea) {
-            uploadArea.addEventListener('click', () => {
-                imageUpload?.click();
+            uploadArea.addEventListener('click', (e) => {
+                // 防止重复触发文件选择对话框
+                e.stopPropagation();
+                if (imageUpload && !imageUpload.disabled) {
+                    imageUpload.click();
+                }
             });
         }
     }
@@ -94,8 +98,9 @@ class MeituanAnalyzer {
 
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             uploadArea.classList.remove('dragover');
-            
+
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 this.handleImageUpload(files[0]);
