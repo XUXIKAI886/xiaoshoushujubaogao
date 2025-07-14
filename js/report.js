@@ -128,7 +128,7 @@ class ReportGenerator {
                 <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                截图数据提取结果
+                数据分析结果
             </h2>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -264,7 +264,7 @@ class ReportGenerator {
                 { metric: '性能评价', ownValue: '解析中...', industryValue: '处理中...', performance: '生成中' }
             ],
             keyFindings: [
-                '正在从截图中提取关键数据...',
+                '正在分析关键经营数据...',
                 '分析店铺经营指标中...',
                 '对比同行业数据中...',
                 '生成专业分析报告中...'
@@ -540,7 +540,7 @@ class ReportGenerator {
             // 最后回退：显示数据提取状态
             console.log('未找到AI关键发现，显示提取状态');
             return [
-                '正在从截图中提取关键数据...',
+                '正在分析关键经营数据...',
                 '分析店铺经营指标中...',
                 '对比同行业数据中...',
                 '生成专业分析报告中...'
@@ -696,7 +696,7 @@ class ReportGenerator {
             );
 
             if (hasValidData) {
-                findings.push('已成功从截图中提取核心经营数据');
+                findings.push('已成功分析核心经营数据');
 
                 const trendMetrics = extractedData.coreMetrics.filter(m => m.trend && m.trend.includes('↑'));
                 if (trendMetrics.length > 0) {
