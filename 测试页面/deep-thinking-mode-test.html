@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深度思考模式提示测试</title>
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .thinking-animation {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h1 class="card-title text-2xl mb-6">🧠 深度思考模式提示测试</h1>
+                
+                <div class="alert alert-info mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">测试说明</h3>
+                        <div class="text-sm">展示新增的深度思考模式提示界面，让用户了解AI正在进行深度分析</div>
+                    </div>
+                </div>
+
+                <!-- 模拟分析界面 -->
+                <div class="card bg-base-100 shadow-xl border-2 border-primary">
+                    <div class="card-body text-center">
+                        <h2 class="card-title text-2xl mb-6 justify-center thinking-animation">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                            AI正在分析您的店铺数据
+                        </h2>
+                        
+                        <div class="flex flex-col items-center space-y-4">
+                            <div class="loading-spinner"></div>
+                            <p class="text-lg font-medium text-primary" id="analysisStatus">AI深度思考中，正在生成专业报告...</p>
+                            <div class="w-full max-w-md">
+                                <progress class="progress progress-primary w-full" value="70" max="100"></progress>
+                            </div>
+                        </div>
+                        
+                        <!-- 新增的深度思考模式提示 -->
+                        <div class="mt-8">
+                            <div class="alert alert-info">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                </svg>
+                                <div>
+                                    <div class="font-semibold mb-1">🧠 深度思考模式已启用</div>
+                                    <div class="text-sm">AI正在进行深度逻辑推理和数据分析，预计需要30-50秒时间。深度思考模式将生成更加专业、详细和具有洞察力的分析报告，请耐心等待...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 优化前后对比 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                    <!-- 优化前 -->
+                    <div class="card bg-yellow-50 border border-yellow-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-yellow-700">📋 优化前</h2>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-white rounded border-l-4 border-yellow-400">
+                                    <strong>提示内容:</strong><br>
+                                    <span class="text-sm">"AI正在深度分析您的店铺数据，这可能需要20-40秒时间，请耐心等待..."</span>
+                                </div>
+                                <div class="p-3 bg-white rounded border-l-4 border-yellow-400">
+                                    <strong>问题:</strong><br>
+                                    <ul class="text-sm list-disc list-inside">
+                                        <li>没有说明为什么需要更长时间</li>
+                                        <li>用户不了解深度思考的价值</li>
+                                        <li>可能产生等待焦虑</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 优化后 -->
+                    <div class="card bg-green-50 border border-green-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-green-700">✅ 优化后</h2>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-white rounded border-l-4 border-green-400">
+                                    <strong>提示内容:</strong><br>
+                                    <div class="text-sm">
+                                        <div class="font-semibold">🧠 深度思考模式已启用</div>
+                                        <div>AI正在进行深度逻辑推理和数据分析，预计需要30-50秒时间。深度思考模式将生成更加专业、详细和具有洞察力的分析报告，请耐心等待...</div>
+                                    </div>
+                                </div>
+                                <div class="p-3 bg-white rounded border-l-4 border-green-400">
+                                    <strong>优势:</strong><br>
+                                    <ul class="text-sm list-disc list-inside">
+                                        <li>明确说明深度思考模式的价值</li>
+                                        <li>设定合理的时间预期</li>
+                                        <li>强调报告质量提升</li>
+                                        <li>减少用户等待焦虑</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 状态文字优化 -->
+                <div class="card bg-blue-50 border border-blue-200 mt-6">
+                    <div class="card-body">
+                        <h2 class="card-title text-blue-700">📝 状态文字优化</h2>
+                        <div class="overflow-x-auto mt-4">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>阶段</th>
+                                        <th>优化前</th>
+                                        <th>优化后</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>数据分析</strong></td>
+                                        <td><span class="text-yellow-600">正在分析图片数据...</span></td>
+                                        <td><span class="text-green-600">正在深度分析店铺数据...</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>报告生成</strong></td>
+                                        <td><span class="text-yellow-600">正在生成分析报告...</span></td>
+                                        <td><span class="text-green-600">AI深度思考中，正在生成专业报告...</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>完成阶段</strong></td>
+                                        <td><span class="text-yellow-600">分析完成，正在生成报告...</span></td>
+                                        <td><span class="text-green-600">深度分析完成，正在整理专业报告...</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户体验改进 -->
+                <div class="card bg-purple-50 border border-purple-200 mt-6">
+                    <div class="card-body">
+                        <h2 class="card-title text-purple-700">🎯 用户体验改进</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h3 class="font-bold mb-3">心理预期管理：</h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-start">
+                                        <span class="badge badge-success badge-sm mr-2 mt-0.5">✓</span>
+                                        <span>明确说明等待时间的价值</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-success badge-sm mr-2 mt-0.5">✓</span>
+                                        <span>强调深度思考的专业性</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-success badge-sm mr-2 mt-0.5">✓</span>
+                                        <span>设定合理的时间预期</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-3">视觉体验优化：</h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-start">
+                                        <span class="badge badge-info badge-sm mr-2 mt-0.5">!</span>
+                                        <span>使用思考图标增强视觉效果</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-info badge-sm mr-2 mt-0.5">!</span>
+                                        <span>添加脉冲动画提升动态感</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-info badge-sm mr-2 mt-0.5">!</span>
+                                        <span>保持页面布局的一致性</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 测试完成状态 -->
+                <div class="alert alert-success mt-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">深度思考模式提示已优化完成</h3>
+                        <div class="text-sm mt-2">
+                            <p>✅ 新增深度思考模式说明，让用户了解等待的价值</p>
+                            <p>✅ 优化状态文字，强调AI的专业分析能力</p>
+                            <p>✅ 设定合理时间预期，减少用户等待焦虑</p>
+                            <p>✅ 保持页面布局美观，不影响用户体验</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟状态切换效果
+        const statusTexts = [
+            '正在连接AI服务...',
+            '正在深度分析店铺数据...',
+            'AI深度思考中，正在生成专业报告...',
+            '深度分析完成，正在整理专业报告...'
+        ];
+        
+        let currentIndex = 0;
+        const statusElement = document.getElementById('analysisStatus');
+        
+        setInterval(() => {
+            if (statusElement && currentIndex < statusTexts.length - 1) {
+                currentIndex++;
+                statusElement.textContent = statusTexts[currentIndex];
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

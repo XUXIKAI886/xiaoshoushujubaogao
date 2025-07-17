@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="autumn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini模型更新测试</title>
+    
+    <!-- Tailwind CSS + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-base-200 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+                <h1 class="card-title text-2xl mb-6">🤖 Gemini模型更新测试</h1>
+                
+                <div class="alert alert-info mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">模型更新说明</h3>
+                        <div class="text-sm">已将AI模型从 gemini-2.5-flash-lite-preview-06-17 更新为 gemini-2.5-flash-thinking</div>
+                    </div>
+                </div>
+
+                <!-- 模型对比 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- 更新前 -->
+                    <div class="card bg-yellow-50 border border-yellow-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-yellow-700">📋 更新前</h2>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-white rounded border-l-4 border-yellow-400">
+                                    <strong>模型名称:</strong><br>
+                                    <code class="text-sm">gemini-2.5-flash-lite-preview-06-17</code>
+                                </div>
+                                <div class="p-3 bg-white rounded border-l-4 border-yellow-400">
+                                    <strong>特点:</strong><br>
+                                    <ul class="text-sm list-disc list-inside">
+                                        <li>轻量级预览版本</li>
+                                        <li>快速响应</li>
+                                        <li>基础分析能力</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 更新后 -->
+                    <div class="card bg-green-50 border border-green-200">
+                        <div class="card-body">
+                            <h2 class="card-title text-green-700">✅ 更新后</h2>
+                            <div class="space-y-3">
+                                <div class="p-3 bg-white rounded border-l-4 border-green-400">
+                                    <strong>模型名称:</strong><br>
+                                    <code class="text-sm">gemini-2.5-flash-thinking</code>
+                                </div>
+                                <div class="p-3 bg-white rounded border-l-4 border-green-400">
+                                    <strong>特点:</strong><br>
+                                    <ul class="text-sm list-disc list-inside">
+                                        <li>增强思维推理能力</li>
+                                        <li>更深度的分析逻辑</li>
+                                        <li>改进的商业洞察生成</li>
+                                        <li>更专业的表述能力</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API配置信息 -->
+                <div class="card bg-blue-50 border border-blue-200 mb-6">
+                    <div class="card-body">
+                        <h2 class="card-title text-blue-700">⚙️ API配置信息</h2>
+                        <div class="overflow-x-auto mt-4">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr>
+                                        <th>配置项</th>
+                                        <th>值</th>
+                                        <th>说明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>baseUrl</strong></td>
+                                        <td><code class="text-xs">https://haxiaiplus.cn/v1/chat/completions</code></td>
+                                        <td>API端点地址</td>
+                                    </tr>
+                                    <tr class="bg-green-100">
+                                        <td><strong>model</strong></td>
+                                        <td><code class="text-xs text-green-700">gemini-2.5-flash-thinking</code></td>
+                                        <td>✅ 已更新的模型</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>temperature</strong></td>
+                                        <td><code class="text-xs">0.8</code></td>
+                                        <td>创造性参数</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>max_tokens</strong></td>
+                                        <td><code class="text-xs">16384</code></td>
+                                        <td>最大输出长度</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>timeout</strong></td>
+                                        <td><code class="text-xs">360000</code></td>
+                                        <td>超时时间(6分钟)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预期改进效果 -->
+                <div class="card bg-purple-50 border border-purple-200 mb-6">
+                    <div class="card-body">
+                        <h2 class="card-title text-purple-700">🚀 预期改进效果</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            <div>
+                                <h3 class="font-bold mb-3">分析质量提升：</h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-start">
+                                        <span class="badge badge-success badge-sm mr-2 mt-0.5">✓</span>
+                                        <span>更深入的SWOT分析逻辑</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-success badge-sm mr-2 mt-0.5">✓</span>
+                                        <span>更精准的数据洞察提取</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-success badge-sm mr-2 mt-0.5">✓</span>
+                                        <span>更专业的商业建议生成</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-bold mb-3">表述能力增强：</h3>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex items-start">
+                                        <span class="badge badge-info badge-sm mr-2 mt-0.5">!</span>
+                                        <span>更流畅的商业语言表达</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-info badge-sm mr-2 mt-0.5">!</span>
+                                        <span>更准确的行业术语使用</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="badge badge-info badge-sm mr-2 mt-0.5">!</span>
+                                        <span>更具说服力的分析论证</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 测试建议 -->
+                <div class="card bg-gray-50 border border-gray-200 mb-6">
+                    <div class="card-body">
+                        <h2 class="card-title text-gray-700">🧪 测试建议</h2>
+                        <div class="mt-4">
+                            <h3 class="font-bold mb-2">建议测试场景：</h3>
+                            <ol class="list-decimal list-inside space-y-2 text-sm">
+                                <li>上传一张美团外卖店铺数据截图</li>
+                                <li>观察AI分析的深度和逻辑性</li>
+                                <li>检查SWOT分析的专业性表述</li>
+                                <li>评估优化建议的可操作性</li>
+                                <li>对比之前版本的分析质量</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 注意事项 -->
+                <div class="alert alert-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">注意事项</h3>
+                        <div class="text-sm mt-2">
+                            <p>⚠️ 新模型可能需要稍长的响应时间来进行深度思考</p>
+                            <p>⚠️ 如遇到API错误，请检查模型名称是否被服务商支持</p>
+                            <p>⚠️ 建议先进行小规模测试，确认功能正常后再正式使用</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 更新完成状态 -->
+                <div class="alert alert-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div>
+                        <h3 class="font-bold">模型更新完成</h3>
+                        <div class="text-sm mt-2">
+                            <p>✅ 已成功将模型更新为 gemini-2.5-flash-thinking</p>
+                            <p>✅ API配置文件已修改完成</p>
+                            <p>✅ 系统现在使用增强思维推理能力的新模型</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -786,6 +786,25 @@ class ReportGenerator {
     }
 
     /**
+     * 处理markdown格式文本，转换为HTML
+     * @param {string} text - 包含markdown格式的文本
+     * @returns {string} 转换后的HTML文本
+     */
+    processMarkdownText(text) {
+        if (!text || typeof text !== 'string') return text;
+
+        return text
+            // 处理粗体 **text** -> <strong>text</strong>
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            // 处理斜体 *text* -> <em>text</em>
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            // 处理代码 `text` -> <code>text</code>
+            .replace(/`(.*?)`/g, '<code class="bg-gray-100 px-1 rounded">$1</code>')
+            // 处理换行
+            .replace(/\n/g, '<br>');
+    }
+
+    /**
      * 生成分析部分
      * @returns {string} HTML字符串
      */
@@ -813,7 +832,7 @@ class ReportGenerator {
                         ${(analysis.strengths || []).map(item => `
                             <li class="text-green-700 text-sm flex items-start">
                                 <span class="text-green-500 mr-2">•</span>
-                                ${item}
+                                ${this.processMarkdownText(item)}
                             </li>
                         `).join('')}
                     </ul>
@@ -831,7 +850,7 @@ class ReportGenerator {
                         ${(analysis.weaknesses || []).map(item => `
                             <li class="text-red-700 text-sm flex items-start">
                                 <span class="text-red-500 mr-2">•</span>
-                                ${item}
+                                ${this.processMarkdownText(item)}
                             </li>
                         `).join('')}
                     </ul>
@@ -849,7 +868,7 @@ class ReportGenerator {
                         ${(analysis.opportunities || []).map(item => `
                             <li class="text-blue-700 text-sm flex items-start">
                                 <span class="text-blue-500 mr-2">•</span>
-                                ${item}
+                                ${this.processMarkdownText(item)}
                             </li>
                         `).join('')}
                     </ul>
@@ -867,7 +886,7 @@ class ReportGenerator {
                         ${(analysis.threats || []).map(item => `
                             <li class="text-yellow-700 text-sm flex items-start">
                                 <span class="text-yellow-500 mr-2">•</span>
-                                ${item}
+                                ${this.processMarkdownText(item)}
                             </li>
                         `).join('')}
                     </ul>
@@ -918,7 +937,7 @@ class ReportGenerator {
                                 </svg>
                                 优化方案
                             </h4>
-                            <p class="text-gray-600 leading-relaxed">${rec.suggestion}</p>
+                            <p class="text-gray-600 leading-relaxed">${this.processMarkdownText(rec.suggestion)}</p>
                         </div>
 
                         ${rec.implementationSteps ? `
@@ -931,7 +950,7 @@ class ReportGenerator {
                                 实施步骤
                             </h4>
                             <ol class="list-decimal list-inside space-y-1 text-sm text-gray-600">
-                                ${rec.implementationSteps.map(step => `<li>${step}</li>`).join('')}
+                                ${rec.implementationSteps.map(step => `<li>${this.processMarkdownText(step)}</li>`).join('')}
                             </ol>
                         </div>
                         ` : ''}
@@ -943,7 +962,7 @@ class ReportGenerator {
                                 </svg>
                                 预期效果
                             </h4>
-                            <p class="text-green-700 text-sm">${rec.expectedImpact}</p>
+                            <p class="text-green-700 text-sm">${this.processMarkdownText(rec.expectedImpact)}</p>
                         </div>
                     </div>
                 `).join('')}

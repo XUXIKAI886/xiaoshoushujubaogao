@@ -6,9 +6,9 @@
 const API_CONFIG = {
     baseUrl: 'https://haxiaiplus.cn/v1/chat/completions',
     apiKey: 'sk-BIChztSl1gwRjl06f5DZ3J15UMnLGgEBpiJa00VHTsQeI00N',
-    model: 'gemini-2.5-flash-lite-preview-06-17',
+    model: 'gemini-2.5-flash',
     temperature: 0.8,
-    max_tokens: 16384,
+    max_tokens: 8384,
     timeout: 360000
 };
 

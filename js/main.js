@@ -270,7 +270,7 @@ class MeituanAnalyzer {
                 throw new Error('无法连接到AI服务，请检查网络连接');
             }
 
-            this.updateAnalysisStatus('正在分析图片数据...');
+            this.updateAnalysisStatus('正在深度分析店铺数据...');
             this.updateAnalysisProgress(30);
 
             // 调用AI分析
@@ -279,7 +279,7 @@ class MeituanAnalyzer {
                 this.storeInfo
             );
 
-            this.updateAnalysisStatus('正在生成分析报告...');
+            this.updateAnalysisStatus('AI深度思考中，正在生成专业报告...');
             this.updateAnalysisProgress(80);
 
             // 处理分析结果
@@ -289,7 +289,7 @@ class MeituanAnalyzer {
 
             this.analysisResult = result;
             
-            this.updateAnalysisStatus('分析完成，正在生成报告...');
+            this.updateAnalysisStatus('深度分析完成，正在整理专业报告...');
             this.updateAnalysisProgress(100);
 
             // 延迟一下再显示结果，让用户看到完成状态
