@@ -9,11 +9,53 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="version" content="2.0.0-ui-fix">
-    
-    <!-- Tailwind CSS + DaisyUI -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="version" content="3.0.0-local-framework">
+
+    <!-- 本地化CSS框架 - 替代DaisyUI + Tailwind CSS -->
+    <link rel="stylesheet" href="css/local-framework.css">
+
+    <!-- 降级支持：如果本地CSS加载失败，使用CDN备份 -->
+    <script>
+        // 检测本地CSS是否加载成功
+        function checkLocalCSS() {
+            const testElement = document.createElement('div');
+            testElement.className = 'btn btn-primary';
+            testElement.style.visibility = 'hidden';
+            testElement.style.position = 'absolute';
+            document.body.appendChild(testElement);
+
+            const computedStyle = window.getComputedStyle(testElement);
+            const hasLocalCSS = computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' &&
+                               computedStyle.backgroundColor !== 'transparent';
+
+            document.body.removeChild(testElement);
+
+            if (!hasLocalCSS) {
+                console.warn('本地CSS框架加载失败，启用CDN备份');
+                loadCDNFallback();
+            } else {
+                console.log('✅ 本地CSS框架加载成功');
+            }
+        }
+
+        // 加载CDN备份
+        function loadCDNFallback() {
+            const daisyLink = document.createElement('link');
+            daisyLink.href = 'https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css';
+            daisyLink.rel = 'stylesheet';
+            daisyLink.type = 'text/css';
+            document.head.appendChild(daisyLink);
+
+            const tailwindScript = document.createElement('script');
+            tailwindScript.src = 'https://cdn.tailwindcss.com';
+            document.head.appendChild(tailwindScript);
+        }
+
+        // 页面加载完成后检测
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkLocalCSS, 100);
+        });
+    </script>
     
     <!-- ECharts -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
@@ -392,6 +434,8 @@
     </script>
 
     <!-- JavaScript -->
+    <script src="js/framework-monitor.js"></script>
+    <script src="js/image-diagnostics.js"></script>
     <script src="js/cache-buster.js"></script>
     <script src="js/tauri-cache-manager.js"></script>
     <script src="js/utils.js"></script>
