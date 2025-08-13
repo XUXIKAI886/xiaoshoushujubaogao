@@ -7,16 +7,33 @@ class CacheBuster {
     constructor() {
         this.currentVersion = '2.0.0-ui-fix';
         this.versionKey = 'app-version';
+        this.isTauri = this.detectTauriEnvironment();
         this.init();
+    }
+
+    /**
+     * 检测是否在Tauri环境中运行
+     */
+    detectTauriEnvironment() {
+        return typeof window.__TAURI__ !== 'undefined' ||
+               typeof window.__TAURI_IPC__ !== 'undefined' ||
+               window.location.protocol === 'tauri:' ||
+               navigator.userAgent.includes('Tauri');
     }
 
     /**
      * 初始化缓存管理器
      */
     init() {
+        if (this.isTauri) {
+            console.log('检测到Tauri环境，使用Tauri缓存管理器');
+            // Tauri环境由TauriCacheManager处理
+            return;
+        }
+
         this.checkVersion();
         this.addVersionToResources();
-        console.log('缓存管理器已初始化，当前版本:', this.currentVersion);
+        console.log('标准缓存管理器已初始化，当前版本:', this.currentVersion);
     }
 
     /**

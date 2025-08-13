@@ -1,0 +1,59 @@
+{
+  "tauriCacheConfig": {
+    "version": "2.0.0-ui-fix",
+    "cacheStrategy": {
+      "webview": {
+        "clearOnUpdate": true,
+        "maxAge": 0,
+        "noCache": true
+      },
+      "localStorage": {
+        "clearOnVersionChange": true,
+        "preserveKeys": [
+          "user-preferences",
+          "api-settings"
+        ],
+        "clearKeys": [
+          "preferred-theme",
+          "theme-settings",
+          "lastAnalysis",
+          "app-cache"
+        ]
+      },
+      "fileSystem": {
+        "clearCacheDir": true,
+        "cacheDirPath": "cache",
+        "tempDirPath": "temp"
+      }
+    },
+    "updateBehavior": {
+      "autoDetect": true,
+      "showNotification": true,
+      "forceReload": false,
+      "gracefulReload": true
+    },
+    "devMode": {
+      "hotReload": true,
+      "checkInterval": 2000,
+      "debugLogging": true
+    },
+    "compatibility": {
+      "fallbackToStandardReload": true,
+      "supportOldTauriVersions": true,
+      "webviewCompatibility": true
+    }
+  },
+  "webviewSettings": {
+    "cachePolicy": "no-cache",
+    "headers": {
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      "Pragma": "no-cache",
+      "Expires": "0"
+    }
+  },
+  "buildSettings": {
+    "injectCacheBuster": true,
+    "versionInFilenames": true,
+    "minifyAssets": true
+  }
+}
