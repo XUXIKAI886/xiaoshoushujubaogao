@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light" id="htmlRoot">
+<html lang="zh-CN" data-theme="autumn" id="htmlRoot">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>美团外卖店铺数据分析系统</title>
+
+    <!-- 防止缓存 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="version" content="2.0.0-ui-fix">
     
     <!-- Tailwind CSS + DaisyUI -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" />
@@ -319,7 +325,74 @@
         </div>
     </div>
 
+    <!-- 版本检测和缓存清理 -->
+    <script>
+        // 检测页面版本，如果是旧版本则提示用户刷新
+        function checkPageVersion() {
+            const currentVersion = '2.0.0-ui-fix';
+            const storedVersion = localStorage.getItem('page-version');
+
+            // 检查是否存在旧版本的主题菜单元素
+            const hasOldThemeMenu = document.querySelector('.dropdown-content') ||
+                                   document.querySelector('.theme-toggle') ||
+                                   document.querySelector('input[name="theme-radios"]');
+
+            if (hasOldThemeMenu || storedVersion !== currentVersion) {
+                showVersionUpdateNotice();
+                localStorage.setItem('page-version', currentVersion);
+            }
+        }
+
+        // 显示版本更新提示
+        function showVersionUpdateNotice() {
+            const notice = document.createElement('div');
+            notice.id = 'version-update-notice';
+            notice.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                padding: 12px 20px;
+                text-align: center;
+                font-weight: 500;
+                z-index: 10000;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            `;
+            notice.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                    <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>🎉 页面已更新！UI排版问题已修复，界面更简洁专业</span>
+                    <button onclick="this.parentElement.parentElement.remove(); document.body.style.paddingTop = '0';"
+                            style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+                        知道了
+                    </button>
+                </div>
+            `;
+
+            document.body.insertBefore(notice, document.body.firstChild);
+            document.body.style.paddingTop = '50px';
+
+            // 5秒后自动隐藏
+            setTimeout(() => {
+                if (notice.parentNode) {
+                    notice.remove();
+                    document.body.style.paddingTop = '0';
+                }
+            }, 5000);
+        }
+
+        // 页面加载完成后检查版本
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(checkPageVersion, 500);
+        });
+    </script>
+
     <!-- JavaScript -->
+    <script src="js/cache-buster.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/api.js"></script>
     <script src="js/chart.js"></script>
