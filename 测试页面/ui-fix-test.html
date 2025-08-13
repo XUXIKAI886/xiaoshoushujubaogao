@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI排版修复测试页面</title>
+    
+    <!-- 故意注释掉CSS框架来模拟加载失败 -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    
+    <style>
+        /* 备用下拉菜单样式 - 防止CSS框架加载失败 */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1000;
+            min-width: 200px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+        }
+
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content,
+        .dropdown-content:hover {
+            display: block;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            margin: 8px 0;
+        }
+
+        .form-control {
+            margin-bottom: 16px;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .test-status {
+            padding: 12px;
+            border-radius: 6px;
+            margin: 16px 0;
+            font-weight: 500;
+        }
+
+        .test-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .test-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UI排版修复测试页面</h1>
+        
+        <div id="test-result" class="test-status test-warning">
+            正在检测CSS加载状态...
+        </div>
+
+        <!-- 模拟导航栏 -->
+        <div class="navbar">
+            <div>
+                <h2>美团外卖数据分析系统</h2>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <!-- 主题切换下拉菜单 -->
+                <div class="dropdown">
+                    <button class="btn">主题切换 ▼</button>
+                    <div class="dropdown-content">
+                        <div class="card">
+                            <div style="padding: 8px;">
+                                <div style="margin: 8px 0; padding: 8px; border-radius: 4px; background: #f3f4f6;">
+                                    <strong>浅色主题</strong><br>
+                                    <small>清新明亮的界面风格</small>
+                                </div>
+                                <div style="margin: 8px 0; padding: 8px; border-radius: 4px; background: #f3f4f6;">
+                                    <strong>企业主题</strong><br>
+                                    <small>专业稳重的商务风格</small>
+                                </div>
+                                <div style="margin: 8px 0; padding: 8px; border-radius: 4px; background: #f3f4f6;">
+                                    <strong>商务主题</strong><br>
+                                    <small>简约高效的办公风格</small>
+                                </div>
+                                <div style="margin: 8px 0; padding: 8px; border-radius: 4px; background: #f3f4f6;">
+                                    <strong>翡翠主题</strong><br>
+                                    <small>清新自然的绿色风格</small>
+                                </div>
+                                <div style="margin: 8px 0; padding: 8px; border-radius: 4px; background: #f3f4f6;">
+                                    <strong>秋天主题</strong><br>
+                                    <small>温暖活力的橙色风格</small>
+                                </div>
+                                <div style="margin: 8px 0; padding: 8px; border-radius: 4px; background: #f3f4f6;">
+                                    <strong>冬天主题</strong><br>
+                                    <small>清爽冷静的蓝色风格</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 帮助下拉菜单 -->
+                <div class="dropdown">
+                    <button class="btn">帮助 ▼</button>
+                    <div class="dropdown-content">
+                        <div class="card">
+                            <div style="padding: 8px;">
+                                <h4>使用说明</h4>
+                                <div style="margin: 8px 0;">
+                                    <strong>1.</strong> 填写店铺基本信息
+                                </div>
+                                <div style="margin: 8px 0;">
+                                    <strong>2.</strong> 上传店铺数据截图
+                                </div>
+                                <div style="margin: 8px 0;">
+                                    <strong>3.</strong> 等待AI分析生成报告
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试说明 -->
+        <div class="card">
+            <h3>测试说明</h3>
+            <p>这个页面故意禁用了DaisyUI和Tailwind CSS的加载，用来模拟CSS框架加载失败的情况。</p>
+            <p><strong>预期效果：</strong></p>
+            <ul>
+                <li>下拉菜单内容应该默认隐藏</li>
+                <li>鼠标悬停时显示下拉内容</li>
+                <li>页面布局应该保持整洁</li>
+                <li>所有功能按钮都应该可点击</li>
+            </ul>
+            
+            <h4>测试步骤：</h4>
+            <ol>
+                <li>检查页面加载时下拉菜单是否隐藏</li>
+                <li>将鼠标悬停在"主题切换"按钮上</li>
+                <li>将鼠标悬停在"帮助"按钮上</li>
+                <li>确认下拉内容正确显示和隐藏</li>
+            </ol>
+        </div>
+
+        <!-- 模拟表单区域 -->
+        <div class="card">
+            <h3>店铺基本信息</h3>
+            <div class="form-control">
+                <label class="label">店铺名称</label>
+                <input type="text" placeholder="请输入店铺名称" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;">
+            </div>
+            <div class="form-control">
+                <label class="label">经营品类</label>
+                <input type="text" placeholder="请输入经营品类" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检测下拉菜单是否正确隐藏
+        function testDropdownBehavior() {
+            const dropdownContents = document.querySelectorAll('.dropdown-content');
+            const testResult = document.getElementById('test-result');
+            
+            let allHidden = true;
+            dropdownContents.forEach(content => {
+                const computedStyle = window.getComputedStyle(content);
+                if (computedStyle.display !== 'none') {
+                    allHidden = false;
+                }
+            });
+            
+            if (allHidden) {
+                testResult.className = 'test-status test-success';
+                testResult.innerHTML = '✅ 测试通过：下拉菜单正确隐藏，备用样式生效！';
+            } else {
+                testResult.className = 'test-status test-warning';
+                testResult.innerHTML = '⚠️ 测试失败：下拉菜单未正确隐藏，可能存在样式问题。';
+            }
+        }
+        
+        // 页面加载完成后进行测试
+        window.addEventListener('load', () => {
+            setTimeout(testDropdownBehavior, 100);
+        });
+    </script>
+</body>
+</html>
