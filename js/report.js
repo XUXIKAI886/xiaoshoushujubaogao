@@ -1053,7 +1053,17 @@ class ReportGenerator {
             const containerId = `chart-${index}`;
             console.log(`准备渲染图表 ${index + 1}: ${chartData.title} (${chartData.type})`);
 
-            setTimeout(() => {
+            setTimeout(async () => {
+                // 仅新增：等待 ECharts 多CDN加载就绪，不改变后续渲染逻辑
+                if (window.waitForECharts) {
+                    try {
+                        await window.waitForECharts();
+                    } catch (e) {
+                        console.error('ECharts 未能加载，跳过渲染:', e);
+                        return;
+                    }
+                }
+
                 const container = document.getElementById(containerId);
                 if (container) {
                     console.log(`正在渲染图表: ${chartData.title}`);
@@ -1124,7 +1134,19 @@ class ReportGenerator {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${this.storeInfo.name}店铺数据分析报告</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script>(function(){if(window.echarts&&typeof window.echarts.init==='function'){window.echartsReadyPromise=Promise.resolve();window.waitForECharts=()=>window.echartsReadyPromise;return;}var V='5.4.3';var S=[
+    'https://cdn.bootcdn.net/ajax/libs/echarts/'+V+'/echarts.min.js',
+    'https://lib.baomitu.com/echarts/'+V+'/echarts.min.js',
+    'https://cdn.staticfile.org/echarts/'+V+'/echarts.min.js',
+    'https://gcore.jsdelivr.net/npm/echarts@'+V+'/dist/echarts.min.js',
+    'https://fastly.jsdelivr.net/npm/echarts@'+V+'/dist/echarts.min.js',
+    'https://unpkg.com/echarts@'+V+'/dist/echarts.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/echarts/'+V+'/echarts.min.js',
+    // 之前使用的 jsDelivr 标准节点，放到最后
+    'https://cdn.jsdelivr.net/npm/echarts@'+V+'/dist/echarts.min.js'];
+    function L(u,t){return new Promise(function(r){var s=document.createElement('script');s.src=u;s.async=true;var m=setTimeout(function(){c(false,'timeout')},t||8000);function c(ok){s.onload=s.onerror=null;clearTimeout(m);r({ok:ok})}s.onload=function(){if(window.echarts&&typeof window.echarts.init==='function'){c(true)}else{c(false)}};s.onerror=function(){c(false)};document.head.appendChild(s);});}
+    window.echartsReadyPromise=(async function(){if(window.echarts&&typeof window.echarts.init==='function')return;for(var i=0;i<S.length;i++){var r=await L(S[i],8000);if(r.ok)break;}if(!window.echarts||typeof window.echarts.init!=='function'){throw new Error('ECharts CDN 加载失败');}})();
+    window.waitForECharts=function(){return window.echartsReadyPromise;};})();</script>
 </head>
 <body class="bg-gray-50">
     <div class="container mx-auto px-4 py-8 max-w-6xl">
@@ -1153,7 +1175,8 @@ class ReportGenerator {
         return charts.map((chartData, index) => {
             const containerId = `chart-${index}`;
             return `
-                setTimeout(() => {
+                setTimeout(async () => {
+                    if (window.waitForECharts) { try { await window.waitForECharts(); } catch(e){ console.error('ECharts 加载失败', e); return; } }
                     const chartDom${index} = document.getElementById('${containerId}');
                     if (chartDom${index}) {
                         const chart${index} = echarts.init(chartDom${index});
