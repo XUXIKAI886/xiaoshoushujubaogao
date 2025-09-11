@@ -1,450 +1,455 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="autumn" id="htmlRoot">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美团外卖店铺数据分析系统</title>
-
-    <!-- 防止缓存 -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    <meta name="version" content="3.0.0-local-framework">
-
-    <!-- 本地化CSS框架 - 替代DaisyUI + Tailwind CSS -->
-    <link rel="stylesheet" href="css/local-framework.css">
-
-    <!-- 降级支持：如果本地CSS加载失败，使用CDN备份 -->
+    <title>呈尚策划 - 美团外卖专业工具集</title>
+    
+    <!-- SEO 优化 -->
+    <meta name="description" content="呈尚策划专业美团外卖工具集，包含AI数据分析系统和数据生成器，助力店铺运营优化">
+    <meta name="keywords" content="美团外卖,数据分析,AI分析,店铺运营,呈尚策划">
+    
+    <!-- 预连接优化 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- 现代化字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind 配置 -->
     <script>
-        // 检测本地CSS是否加载成功
-        function checkLocalCSS() {
-            const testElement = document.createElement('div');
-            testElement.className = 'btn btn-primary';
-            testElement.style.visibility = 'hidden';
-            testElement.style.position = 'absolute';
-            document.body.appendChild(testElement);
-
-            const computedStyle = window.getComputedStyle(testElement);
-            const hasLocalCSS = computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' &&
-                               computedStyle.backgroundColor !== 'transparent';
-
-            document.body.removeChild(testElement);
-
-            if (!hasLocalCSS) {
-                console.warn('本地CSS框架加载失败，启用CDN备份');
-                loadCDNFallback();
-            } else {
-                console.log('✅ 本地CSS框架加载成功');
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'gradient': 'gradient 15s ease infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.6s ease-out',
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'mesh-gradient': 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+                    }
+                }
             }
         }
-
-        // 加载CDN备份
-        function loadCDNFallback() {
-            const daisyLink = document.createElement('link');
-            daisyLink.href = 'https://cdn.jsdelivr.net/npm/daisyui@4.12.14/dist/full.min.css';
-            daisyLink.rel = 'stylesheet';
-            daisyLink.type = 'text/css';
-            document.head.appendChild(daisyLink);
-
-            const tailwindScript = document.createElement('script');
-            tailwindScript.src = 'https://cdn.tailwindcss.com';
-            document.head.appendChild(tailwindScript);
-        }
-
-        // 页面加载完成后检测
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(checkLocalCSS, 100);
-        });
     </script>
     
-    <!-- ECharts 多CDN加载器（不改变渲染逻辑） -->
-    <script src="js/echarts-cdn-loader.js"></script>
-    
-    <!-- 自定义样式 -->
     <style>
-        .upload-area {
-            transition: all 0.3s ease;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-10px) rotate(1deg); }
+            66% { transform: translateY(5px) rotate(-1deg); }
         }
-        .upload-area:hover {
-            border-color: #3B82F6;
-            background-color: #EFF6FF;
+        
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
-        .upload-area.dragover {
-            border-color: #1D4ED8;
-            background-color: #DBEAFE;
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
-        .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        @keyframes scaleIn {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
         }
-        .chart-container {
-            width: 100%;
-            height: 400px;
+        
+        .gradient-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
         }
-
-
-
-        /* 主题特定样式 */
-        .chart-container {
-            border-radius: 8px;
-            transition: all 0.3s ease;
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        /* 企业主题样式 */
-        [data-theme="corporate"] .upload-area {
-            background-color: #f8fafc;
-            border-color: #cbd5e1;
+        
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        /* 商务主题样式 */
-        [data-theme="business"] .upload-area {
-            background-color: #fefefe;
-            border-color: #d1d5db;
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-
-        /* 翡翠主题样式 */
-        [data-theme="emerald"] .upload-area {
-            background-color: #f0fdf4;
-            border-color: #bbf7d0;
+        
+        .mesh-bg {
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
         }
-
-        /* 秋天主题样式 */
-        [data-theme="autumn"] .upload-area {
-            background-color: #fff7ed;
-            border-color: #fed7aa;
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        /* 冬天主题样式 */
-        [data-theme="winter"] .upload-area {
-            background-color: #f0f9ff;
-            border-color: #bae6fd;
+        
+        .card-gradient-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-
-
+        
+        .card-gradient-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .icon-float {
+            animation: float 6s ease-in-out infinite;
+        }
     </style>
 </head>
-<body class="bg-base-200 min-h-screen">
-    <!-- 导航栏 -->
-    <div class="navbar bg-base-100 shadow-lg border-b border-base-200">
-        <div class="flex-1">
-            <div class="flex items-center">
-                <div class="flex items-center mr-4">
-                    <svg class="w-8 h-8 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+<body class="bg-gray-50 min-h-screen overflow-x-hidden">
+    <!-- 主容器 -->
+    <div class="min-h-screen flex flex-col">
+        <!-- 顶部导航 -->
+        <nav class="fixed top-0 w-full z-50 glass-effect">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                 </div>
-                <div class="flex flex-col">
-                    <div class="flex items-center">
-                        <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-sm font-bold mr-2">呈尚策划销售部专用</span>
-                        <div class="badge badge-primary badge-sm">专业版</div>
+                        <span class="text-xl font-bold text-gray-800">呈尚策划</span>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">专业版</span>
                     </div>
-                    <div class="flex items-center mt-1">
-                        <h1 class="text-lg font-bold text-base-content mr-3">美团外卖店铺</h1>
-                        <div class="flex items-center bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-sm font-bold mr-2">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                            20秒
-                        </div>
-                        <span class="text-base font-semibold text-base-content">一键生成专业精美报告</span>
+                    <div class="hidden md:flex items-center space-x-6 text-sm text-gray-600">
+                        <span class="flex items-center space-x-1">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <span>在线服务</span>
+                        </span>
                     </div>
                 </div>
             </div>
+        </nav>
+
+        <!-- 主内容区域 -->
+        <main class="flex-1 pt-16">
+            <!-- Hero 区域 -->
+            <section class="relative py-20 sm:py-32">
+                <!-- 背景装饰 -->
+                <div class="absolute inset-0 mesh-bg"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center">
+
+                        <!-- 浮动图标装饰 -->
+                        <div class="absolute top-20 left-10 icon-float opacity-30" style="animation-delay: 0s;">
+                            <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
         </div>
-        <div class="flex-none">
-            <div class="flex items-center space-x-3">
-                <!-- 帮助信息 -->
-                <div class="text-sm text-base-content/70 hidden md:block">
-                    <span class="mr-4">📝 填写信息</span>
-                    <span class="mr-4">📸 上传截图</span>
-                    <span>🤖 AI分析</span>
+                        <div class="absolute top-32 right-16 icon-float opacity-30" style="animation-delay: 2s;">
+                            <svg class="w-6 h-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"/>
+                            </svg>
                 </div>
+                        <div class="absolute bottom-10 left-20 icon-float opacity-30" style="animation-delay: 4s;">
+                            <svg class="w-10 h-10 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
+                            </svg>
             </div>
         </div>
     </div>
+            </section>
 
-    <!-- 主要内容区域 -->
-    <div class="container mx-auto px-4 py-8 max-w-6xl">
-        <!-- 进度指示器 -->
-        <div class="mb-8">
-            <ul class="steps steps-horizontal w-full">
-                <li class="step step-primary" id="step-info">店铺信息</li>
-                <li class="step" id="step-upload">上传截图</li>
-                <li class="step" id="step-analyze">AI分析</li>
-                <li class="step" id="step-report">生成报告</li>
-            </ul>
+            <!-- 工具卡片区域 -->
+            <section class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                    <!-- 工具卡片网格 -->
+                    <div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                        <!-- 数据分析系统 -->
+                        <div class="group hover-lift cursor-pointer" onclick="window.location.href='analyzer.html'">
+                            <div class="relative bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+                                <!-- 卡片头部 -->
+                                <div class="card-gradient-1 p-8 text-white relative overflow-hidden">
+                                    <!-- 装饰性图案 -->
+                                    <div class="absolute top-0 right-0 w-32 h-32 opacity-20">
+                                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                                            <defs>
+                                                <pattern id="grid1" width="10" height="10" patternUnits="userSpaceOnUse">
+                                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" stroke-width="1"/>
+                                                </pattern>
+                                            </defs>
+                                            <rect width="100" height="100" fill="url(#grid1)" />
+                                        </svg>
         </div>
 
-        <!-- 步骤1: 店铺基本信息 -->
-        <div class="card bg-base-100 shadow-xl mb-8" id="store-info-section">
-            <div class="card-body">
-                <h2 class="card-title text-2xl mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    <div class="relative z-10">
+                                        <!-- 图标和徽章 -->
+                                        <div class="flex items-center justify-between mb-6">
+                                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                </svg>
+                                            </div>
+                                            <div class="flex items-center space-x-2 bg-white/20 rounded-full px-3 py-1 text-sm font-medium">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    店铺基本信息
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text font-semibold">店铺名称 *</span>
-                        </label>
-                        <input type="text" id="storeName" placeholder="请输入店铺名称" 
-                               class="input input-bordered w-full" maxlength="50" required>
-                        <label class="label">
-                            <span class="label-text-alt text-gray-500">最多50个字符</span>
-                        </label>
+                                                <span>20秒分析</span>
+                                            </div>
                     </div>
                     
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text font-semibold">经营品类 *</span>
-                        </label>
-                        <input type="text" id="storeCategory" placeholder="请输入经营品类，如：中式快餐、川湘菜、火锅等"
-                               class="input input-bordered w-full" maxlength="30" required>
-                        <label class="label">
-                            <span class="label-text-alt text-gray-500">最多30个字符</span>
-                        </label>
+                                        <!-- 标题和描述 -->
+                                        <h3 class="text-2xl font-bold mb-3">数据分析系统</h3>
+                                        <p class="text-white/90 text-lg">AI智能分析店铺截图，生成专业运营报告</p>
+                                    </div>
                     </div>
                     
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text font-semibold">店铺地址 *</span>
-                        </label>
-                        <input type="text" id="storeAddress" placeholder="请输入店铺地址"
-                               class="input input-bordered w-full" maxlength="100" required>
-                        <label class="label">
-                            <span class="label-text-alt text-gray-500">最多100个字符</span>
-                        </label>
+                                <!-- 卡片内容 -->
+                                <div class="p-8">
+                                    <!-- 功能特点 -->
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div class="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-blue-600 mb-1">AI</div>
+                                            <div class="text-sm text-blue-700">智能识别</div>
                     </div>
-
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text font-semibold">数据时间范围</span>
-                        </label>
-                        <input type="text" id="dataDateRange" placeholder="2025-06-12 至 2025-07-11"
-                               class="input input-bordered w-full" maxlength="50">
-                        <label class="label">
-                            <span class="label-text-alt text-gray-500">格式：YYYY-MM-DD 至 YYYY-MM-DD</span>
-                        </label>
+                                        <div class="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-purple-600 mb-1">SWOT</div>
+                                            <div class="text-sm text-purple-700">专业分析</div>
                     </div>
                 </div>
                 
-                <div class="card-actions justify-end mt-6">
-                    <button class="btn btn-primary" onclick="validateStoreInfo()">
-                        下一步：上传截图
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <!-- 功能列表 -->
+                                    <ul class="space-y-3 mb-8">
+                                        <li class="flex items-center text-gray-700">
+                                            <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span>截图智能识别与数据提取</span>
+                                        </li>
+                                        <li class="flex items-center text-gray-700">
+                                            <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span>专业SWOT分析与优化建议</span>
+                                        </li>
+                                        <li class="flex items-center text-gray-700">
+                                            <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span>可视化图表与行动计划</span>
+                                        </li>
+                                    </ul>
+
+                                    <!-- 行动按钮 -->
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-sm text-gray-500">
+                                            <span class="font-medium text-gray-700">适用于：</span>
+                                            店铺数据分析
+                                        </div>
+                                        <div class="flex items-center text-blue-600 font-medium group-hover:text-blue-700 transition-colors">
+                                            <span>立即分析</span>
+                                            <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
-                    </button>
+                                        </div>
+                                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 步骤2: 图片上传 -->
-        <div class="card bg-base-100 shadow-xl mb-8 hidden" id="upload-section">
-            <div class="card-body">
-                <h2 class="card-title text-2xl mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <!-- 数据生成器 -->
+                        <div class="group hover-lift cursor-pointer" onclick="window.open('https://xuxikai886.github.io/meituanzhenshishujushengchengqi/', '_blank')">
+                            <div class="relative bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+                                <!-- 卡片头部 -->
+                                <div class="card-gradient-2 p-8 text-white relative overflow-hidden">
+                                    <!-- 装饰性图案 -->
+                                    <div class="absolute top-0 right-0 w-32 h-32 opacity-20">
+                                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                                            <defs>
+                                                <pattern id="grid2" width="8" height="8" patternUnits="userSpaceOnUse">
+                                                    <circle cx="4" cy="4" r="1" fill="currentColor"/>
+                                                </pattern>
+                                            </defs>
+                                            <rect width="100" height="100" fill="url(#grid2)" />
+                                        </svg>
+                                    </div>
+                                    
+                                    <div class="relative z-10">
+                                        <!-- 图标和徽章 -->
+                                        <div class="flex items-center justify-between mb-6">
+                                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    上传店铺数据截图
-                </h2>
-                
-                <div class="upload-area border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer"
-                     id="uploadArea">
-                    <input type="file" id="imageUpload" accept="image/jpeg,image/png,image/webp" class="hidden">
-                    <div class="upload-content" id="uploadContent">
-                        <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                            </div>
+                                            <div class="flex items-center space-x-2 bg-white/20 rounded-full px-3 py-1 text-sm font-medium">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
                         </svg>
-                        <p class="text-lg font-semibold text-gray-700 mb-2">拖拽图片到此处或点击上传</p>
-                        <p class="text-sm text-gray-500">支持 JPG, PNG, WEBP 格式，最大 10MB</p>
+                                                <span>智能生成</span>
                     </div>
                 </div>
                 
-                <div class="preview-area hidden mt-6" id="previewArea">
-                    <h3 class="text-lg font-semibold mb-4">图片预览</h3>
-                    <div class="flex justify-center">
-                        <img id="imagePreview" class="max-w-full max-h-96 rounded-lg shadow-lg">
-                    </div>
-                    <div class="text-center mt-4">
-                        <button class="btn btn-outline btn-sm" onclick="removeImage()">重新选择</button>
+                                        <!-- 标题和描述 -->
+                                        <h3 class="text-2xl font-bold mb-3">数据生成器</h3>
+                                        <p class="text-white/90 text-lg">生成真实的美团店铺数据截图</p>
                     </div>
                 </div>
                 
-                <div class="card-actions justify-between mt-6">
-                    <button class="btn btn-outline" onclick="goToStep('store-info')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                        上一步
-                    </button>
-                    <button class="btn btn-primary" id="analyzeBtn" onclick="startAnalysis()" disabled>
-                        开始AI分析
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </button>
+                                <!-- 卡片内容 -->
+                                <div class="p-8">
+                                    <!-- 功能特点 -->
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div class="text-center p-4 bg-gradient-to-br from-rose-50 to-pink-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-rose-600 mb-1">模拟</div>
+                                            <div class="text-sm text-rose-700">真实数据</div>
                 </div>
+                                        <div class="text-center p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-orange-600 mb-1">生成</div>
+                                            <div class="text-sm text-orange-700">一键创建</div>
             </div>
         </div>
 
-        <!-- 步骤3: AI分析中 -->
-        <div class="card bg-base-100 shadow-xl mb-8 hidden" id="analysis-section">
-            <div class="card-body text-center">
-                <h2 class="card-title text-2xl mb-6 justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                    <!-- 功能列表 -->
+                                    <ul class="space-y-3 mb-8">
+                                        <li class="flex items-center text-gray-700">
+                                            <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span>逼真的美团后台数据界面</span>
+                                        </li>
+                                        <li class="flex items-center text-gray-700">
+                                            <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span>多种图表格式和数据类型</span>
+                                        </li>
+                                        <li class="flex items-center text-gray-700">
+                                            <svg class="w-5 h-5 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
-                    AI正在分析您的店铺数据
-                </h2>
-                
-                <div class="flex flex-col items-center space-y-4">
-                    <div class="loading-spinner"></div>
-                    <p class="text-lg" id="analysisStatus">正在处理图片数据...</p>
-                    <div class="w-full max-w-md">
-                        <progress class="progress progress-primary w-full" id="analysisProgress"></progress>
-                    </div>
-                </div>
-                
-                <div class="mt-8">
-                    <div class="alert alert-info">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                        </svg>
-                        <div>
-                            <div class="font-semibold mb-1">🧠 深度思考模式已启用</div>
-                            <div class="text-sm">AI正在进行智能分析和数据处理，预计需要20-30秒时间。系统将生成专业、详细的分析报告，请耐心等待...</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                            <span>演示培训和测试场景</span>
+                                        </li>
+                                    </ul>
 
-        <!-- 步骤4: 分析报告 -->
-        <div class="hidden" id="report-section">
-            <div class="card bg-base-100 shadow-xl mb-8">
-                <div class="card-body">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="card-title text-2xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                            </svg>
-                            数据分析报告
-                        </h2>
-                        <div class="flex space-x-2">
-                            <button class="btn btn-outline btn-sm" onclick="copyReportName()">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                                复制报告名称
-                            </button>
-                            <button class="btn btn-primary btn-sm" onclick="startNewAnalysis()">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                </svg>
-                                重新分析
-                            </button>
-                        </div>
+                                    <!-- 行动按钮 -->
+                                    <div class="flex items-center justify-between">
+                                        <div class="text-sm text-gray-500">
+                                            <span class="font-medium text-gray-700">适用于：</span>
+                                            演示测试场景
+                                        </div>
+                                        <div class="flex items-center text-pink-600 font-medium group-hover:text-pink-700 transition-colors">
+                                            <span>立即生成</span>
+                                            <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2M7 7h10M7 7v10M7 7l4-4m6 6l-3-3" />
+                                            </svg>
                     </div>
-                    
-                    <!-- 报告内容将通过JavaScript动态生成 -->
-                    <div id="reportContent">
-                        <!-- 动态内容区域 -->
+                </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+            </section>
+
+            <!-- 底部信息区域 -->
+            <footer class="bg-gray-50 border-t border-gray-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                </div>
+            </footer>
+        </main>
     </div>
 
-    <!-- 版本检测和缓存清理 -->
-    <script>
-        // 检测页面版本，如果是旧版本则提示用户刷新
-        function checkPageVersion() {
-            const currentVersion = '2.0.0-ui-fix';
-            const storedVersion = localStorage.getItem('page-version');
-
-            // 检查是否存在旧版本的主题菜单元素
-            const hasOldThemeMenu = document.querySelector('.dropdown-content') ||
-                                   document.querySelector('.theme-toggle') ||
-                                   document.querySelector('input[name="theme-radios"]');
-
-            if (hasOldThemeMenu || storedVersion !== currentVersion) {
-                showVersionUpdateNotice();
-                localStorage.setItem('page-version', currentVersion);
-            }
-        }
-
-        // 显示版本更新提示
-        function showVersionUpdateNotice() {
-            const notice = document.createElement('div');
-            notice.id = 'version-update-notice';
-            notice.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #10b981, #059669);
-                color: white;
-                padding: 12px 20px;
-                text-align: center;
-                font-weight: 500;
-                z-index: 10000;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            `;
-            notice.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
-                    <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>🎉 页面已更新！UI排版问题已修复，界面更简洁专业</span>
-                    <button onclick="this.parentElement.parentElement.remove(); document.body.style.paddingTop = '0';"
-                            style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; margin-left: 10px;">
-                        知道了
-                    </button>
-                </div>
-            `;
-
-            document.body.insertBefore(notice, document.body.firstChild);
-            document.body.style.paddingTop = '50px';
-
-            // 5秒后自动隐藏
-            setTimeout(() => {
-                if (notice.parentNode) {
-                    notice.remove();
-                    document.body.style.paddingTop = '0';
-                }
-            }, 5000);
-        }
-
-        // 页面加载完成后检查版本
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(checkPageVersion, 500);
-        });
-    </script>
-
     <!-- JavaScript -->
-    <script src="js/framework-monitor.js"></script>
-    <script src="js/image-diagnostics.js"></script>
-    <script src="js/cache-buster.js"></script>
-    <script src="js/tauri-cache-manager.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/chart.js"></script>
-    <script src="js/report.js"></script>
-    <script src="js/demo-data.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航栏滚动效果
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('bg-white/95');
+                    nav.classList.remove('glass-effect');
+                } else {
+                    nav.classList.remove('bg-white/95');
+                    nav.classList.add('glass-effect');
+                }
+            });
 
+            // 卡片交互效果
+            const cards = document.querySelectorAll('.hover-lift');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+                
+                card.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(-4px) scale(0.98)';
+                });
+                
+                card.addEventListener('mouseup', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+            });
 
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+
+        // 页面性能优化
+        if ('loading' in HTMLImageElement.prototype) {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            images.forEach(img => {
+                img.src = img.dataset.src;
+            });
+        }
+    </script>
 </body>
 </html>
