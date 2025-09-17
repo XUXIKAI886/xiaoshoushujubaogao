@@ -2,7 +2,7 @@
 
 ## 📋 项目简介
 
-这是一个基于AI的美团外卖店铺数据分析系统，通过上传店铺数据截图，利用Gemini 2.5 Flash API进行智能分析，生成专业的数据可视化报告。
+这是一个基于AI的美团外卖店铺数据分析系统，通过上传店铺数据截图，利用Gemini 2.5 Flash Lite (NoThinking) API进行智能分析，生成专业的数据可视化报告。
 
 ## ✨ 功能特性
 
@@ -23,7 +23,7 @@
 - **UI组件库**: DaisyUI (基于Tailwind CSS)
 - **图表库**: ECharts 5.4.3
 - **图标库**: Heroicons (专业SVG图标系统)
-- **AI服务**: Gemini 2.5 Flash API (快速响应，高效分析)
+- **AI服务**: Gemini 2.5 Flash Lite (NoThinking) API (快速响应，高效分析)
 - **样式框架**: Tailwind CSS
 
 ## 🚀 快速开始
@@ -148,13 +148,13 @@ meituan-data-analyzer/
 
 ### API配置
 
-项目使用Gemini 2.5 Flash API（OpenAI兼容格式），配置信息在 `js/api.js` 文件中：
+项目使用Gemini 2.5 Flash Lite (NoThinking) API（OpenAI兼容格式），配置信息在 `js/api.js` 文件中：
 
 ```javascript
 const API_CONFIG = {
     baseUrl: 'https://haxiaiplus.cn/v1/chat/completions',
     apiKey: 'sk-BIChztSl1gwRjl06f5DZ3J15UMnLGgEBpiJa00VHTsQeI00N',
-    model: 'gemini-2.5-flash-lite-preview-06-17',
+    model: 'gemini-2.5-flash-lite-nothinking',
     temperature: 0.8,
     max_tokens: 16384,
     timeout: 360000
@@ -292,6 +292,11 @@ A: 支持所有现代浏览器：
 - Edge 90+
 
 ## 📝 更新日志
+
+### v1.8.6 (2025-09-17) - 模型切换为 Flash Lite NoThinking
+- 🤖 **AI模型更新**: 将模型从 gemini-2.5-flash 切换为 gemini-2.5-flash-lite-nothinking
+- ⚡ **性能取向**: 进一步提升响应速度，保持分析质量在当前需求范围内
+- 📚 **文档同步**: 更新README中的模型说明与API配置示例
 
 ### v1.8.5 (2025-01-12) - AI模型性能优化版本
 - 🚀 **AI模型优化**: 将模型从 gemini-2.5-flash-thinking 更换为 gemini-2.5-flash，显著提升响应速度
