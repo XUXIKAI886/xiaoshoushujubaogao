@@ -148,22 +148,22 @@ meituan-data-analyzer/
 
 ### API配置
 
-项目使用Gemini 2.5 Flash Lite (NoThinking) API（OpenAI兼容格式），配置信息在 `js/api.js` 文件中：
+项目使用 Gemini 3.1 Flash Lite Preview API（OpenAI兼容格式），配置信息在 `js/api.js` 文件中：
 
 ```javascript
 const API_CONFIG = {
-    baseUrl: 'https://haxiaiplus.cn/v1/chat/completions',
-    apiKey: 'sk-BIChztSl1gwRjl06f5DZ3J15UMnLGgEBpiJa00VHTsQeI00N',
-    model: 'gemini-2.5-flash-lite-nothinking',
+    baseUrl: 'https://api.vectorengine.ai',
+    apiKey: 'sk-B0YLWcQDpaxvJ1fsWok2BHSjJQUWNgPU8qz99bDSzoRtiWmX',
+    model: 'gemini-3.1-flash-lite-preview',
     temperature: 0.8,
-    max_tokens: 16384,
+    max_tokens: 8384,
     timeout: 360000
 };
 ```
 
 ### 配置参数说明
 
-- **baseUrl**: API端点地址（OpenAI兼容格式）
+- **baseUrl**: API基础地址（代码会自动补全为OpenAI兼容的 `chat/completions` 端点）
 - **apiKey**: API密钥（Bearer Token格式）
 - **model**: 使用的AI模型名称
 - **temperature**: 生成文本的随机性（0-1）

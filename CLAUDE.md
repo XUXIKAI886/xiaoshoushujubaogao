@@ -89,9 +89,9 @@ open 测试页面/theme-ui-test.html     # 主题切换测试
 
 ```javascript
 const API_CONFIG = {
-    baseUrl: 'https://haxiaiplus.cn/v1/chat/completions',
-    apiKey: 'sk-BIChztSl1gwRjl06f5DZ3J15UMnLGgEBpiJa00VHTsQeI00N',
-    model: 'gemini-2.5-flash',
+    baseUrl: 'https://api.vectorengine.ai',
+    apiKey: 'sk-B0YLWcQDpaxvJ1fsWok2BHSjJQUWNgPU8qz99bDSzoRtiWmX',
+    model: 'gemini-3.1-flash-lite-preview',
     temperature: 0.8,
     max_tokens: 8384,
     timeout: 360000

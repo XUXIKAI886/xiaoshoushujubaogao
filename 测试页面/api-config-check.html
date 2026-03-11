@@ -248,7 +248,7 @@
             // DNS解析测试
             try {
                 const start = Date.now();
-                await fetch('https://haxiaiplus.cn', { mode: 'no-cors' });
+                await fetch('https://api.vectorengine.ai', { mode: 'no-cors' });
                 const time = Date.now() - start;
                 document.getElementById('dnsStatus').textContent = `正常 (${time}ms)`;
                 document.getElementById('dnsStatus').className = 'badge badge-success';
@@ -259,7 +259,7 @@
 
             // HTTPS连接测试
             try {
-                const response = await fetch('https://haxiaiplus.cn', { mode: 'no-cors' });
+                const response = await fetch('https://api.vectorengine.ai', { mode: 'no-cors' });
                 document.getElementById('httpsStatus').textContent = '支持';
                 document.getElementById('httpsStatus').className = 'badge badge-success';
             } catch (error) {
@@ -269,7 +269,7 @@
 
             // CORS测试
             try {
-                const response = await fetch('https://haxiaiplus.cn/v1beta/models');
+                const response = await fetch('https://api.vectorengine.ai/v1/models');
                 document.getElementById('corsStatus').textContent = '允许';
                 document.getElementById('corsStatus').className = 'badge badge-success';
             } catch (error) {

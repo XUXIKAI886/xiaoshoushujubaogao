@@ -4,9 +4,9 @@
  * Gemini API配置
  */
 const API_CONFIG = {
-    baseUrl: 'https://haxiaiplus.cn/v1/chat/completions',
-    apiKey: 'sk-BIChztSl1gwRjl06f5DZ3J15UMnLGgEBpiJa00VHTsQeI00N',
-    model: 'gemini-2.5-flash-lite-nothinking',
+    baseUrl: 'https://api.vectorengine.ai',
+    apiKey: 'sk-B0YLWcQDpaxvJ1fsWok2BHSjJQUWNgPU8qz99bDSzoRtiWmX',
+    model: 'gemini-3.1-flash-lite-preview',
     temperature: 0.8,
     max_tokens: 8384,
     timeout: 360000
@@ -23,6 +23,23 @@ class GeminiAPI {
         this.temperature = config.temperature || 0.8;
         this.max_tokens = config.max_tokens || 16384;
         this.timeout = config.timeout || 360000;
+    }
+
+    /**
+     * 获取实际请求地址
+     * 兼容仅传入根域名的OpenAI兼容接口配置
+     * @returns {string} 完整请求地址
+     */
+    getRequestUrl() {
+        if (!this.baseUrl) {
+            return '';
+        }
+
+        if (this.baseUrl.includes('/chat/completions')) {
+            return this.baseUrl;
+        }
+
+        return `${this.baseUrl.replace(/\/+$/, '')}/v1/chat/completions`;
     }
 
     /**
@@ -442,15 +459,17 @@ class GeminiAPI {
                 max_tokens: this.max_tokens || 16384
             };
 
+            const requestUrl = this.getRequestUrl();
+
             console.log('发送API请求...');
             console.log('请求配置:', {
-                url: this.baseUrl,
+                url: requestUrl,
                 model: this.model,
                 temperature: this.temperature || 0.8,
                 max_tokens: this.max_tokens || 16384
             });
 
-            const response = await fetch(this.baseUrl, {
+            const response = await fetch(requestUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -524,8 +543,10 @@ class GeminiAPI {
 
         try {
             console.log('开始API连接测试...');
+            const requestUrl = this.getRequestUrl();
             console.log('API配置:', {
                 baseUrl: this.baseUrl,
+                requestUrl: requestUrl,
                 model: this.model,
                 apiKey: this.apiKey ? `${this.apiKey.substring(0, 10)}...` : '未配置'
             });
@@ -544,9 +565,9 @@ class GeminiAPI {
                 max_tokens: 100
             };
 
-            console.log('请求URL:', this.baseUrl);
+            console.log('请求URL:', requestUrl);
 
-            const response = await fetch(this.baseUrl, {
+            const response = await fetch(requestUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
