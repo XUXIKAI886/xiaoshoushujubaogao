@@ -6,7 +6,7 @@
 const API_CONFIG = {
     baseUrl: 'https://api.vectorengine.ai',
     apiKey: 'sk-B0YLWcQDpaxvJ1fsWok2BHSjJQUWNgPU8qz99bDSzoRtiWmX',
-    model: 'gemini-3.1-flash-lite-preview',
+    model: 'gemini-3-flash-preview',
     temperature: 0.8,
     max_tokens: 8384,
     timeout: 360000
